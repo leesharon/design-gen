@@ -39,7 +39,9 @@
     "lint-staged": {
         "src/**/*.{js,jsx,ts,tsx,css,json}": [
             "eslint --fix",
-            "git add"
+            "git add",
+            "eslint --quiet",
+            "git diff --exit-code"
         ]
     }
 }
