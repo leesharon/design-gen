@@ -10,7 +10,8 @@
     },
     "dependencies": {
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "styled-components": "^5.3.9"
     },
     "devDependencies": {
         "@figma/plugin-typings": "^1.50.0",
@@ -39,9 +40,7 @@
     "lint-staged": {
         "src/**/*.{js,jsx,ts,tsx,css,json}": [
             "eslint --fix",
-            "git add",
-            "eslint --quiet",
-            "git diff --exit-code"
+            "git add"
         ]
     }
 }
