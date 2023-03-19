@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+import styled from 'styled-components'
 import logo from '../assets/logo.svg'
 import '../styles/ui.css'
 
@@ -32,7 +33,7 @@ function App() {
     return (
         <div>
             <img src={logo} />
-            <h2>Rectangle Creator</h2>
+            <Heading>Rectangle Creator</Heading>
             <p>
                 Count: <input ref={countRef} />
             </p>
@@ -43,5 +44,11 @@ function App() {
         </div>
     )
 }
+
+const Heading = styled.h1`
+    font-size: 1.5em;
+    text-align: center;
+    color: blue;
+`
 
 export default App
