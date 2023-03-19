@@ -1,6 +1,5 @@
 Todo's
 
-- display color palette on new page
 - check about other types of paints like gradient and so
 - check about stroke color and what else that could determine the color palette
 - enums

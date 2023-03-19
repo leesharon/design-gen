@@ -1,14 +1,14 @@
 /* eslint-disable indent */
+import { MsgTypes } from '../enums/MsgTypes.enum'
 import { colorsUtils } from './utils/colors.utils'
 
 figma.showUI(__html__)
-console.log('figma: ', figma)
 
 figma.skipInvisibleInstanceChildren = true
 
 figma.ui.onmessage = (msg) => {
     switch (msg.type) {
-        case 'generate-design-system':
+        case MsgTypes.GENERATE_DESIGN_SYSTEM:
             generateDesignSystem()
             break
         default:
@@ -20,7 +20,6 @@ figma.ui.onmessage = (msg) => {
 
 function generateDesignSystem() {
     const { selection } = figma.currentPage
-    console.log('selection:', selection)
 
     const uniqueColors = new Set<string>()
 
@@ -47,7 +46,7 @@ function generateDesignSystem() {
     colorsUtils.generateColorPaletteFrame([...uniqueColors])
 
     figma.ui.postMessage({
-        type: 'generate-design-system',
+        type: MsgTypes.GENERATE_DESIGN_SYSTEM,
         msg: 'Created design system! Rectangles',
     })
 }
