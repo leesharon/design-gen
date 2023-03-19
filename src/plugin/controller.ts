@@ -1,4 +1,5 @@
 figma.showUI(__html__)
+console.log('figma: ', figma)
 
 figma.ui.onmessage = (msg) => {
     if (msg.type === 'create-rectangles') {

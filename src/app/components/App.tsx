@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
+import styled from 'styled-components'
 import logo from '../assets/logo.svg'
 import '../styles/ui.css'
+import { Heading1 } from './Generics'
 
 function App() {
-    const textbox = React.useRef<HTMLInputElement>(undefined)
+    const textbox = useRef<HTMLInputElement>(undefined)
 
-    const countRef = React.useCallback((element: HTMLInputElement) => {
+    const countRef = useCallback((element: HTMLInputElement) => {
         if (element) element.value = '5'
         textbox.current = element
     }, [])
@@ -19,7 +21,7 @@ function App() {
         parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
             const { type, message } = event.data.pluginMessage
@@ -31,17 +33,25 @@ function App() {
 
     return (
         <div>
-            <img src={logo} />
-            <h2>Rectangle Creator</h2>
-            <p>
-                Count: <input ref={countRef} />
-            </p>
-            <button id="create" onClick={onCreate}>
+            <Image src={logo} alt={'logo'} />
+            <Heading1>Rectangle Creator</Heading1>
+            <Text>
+                Count: <Input ref={countRef} />
+            </Text>
+            <Button id="create" onClick={onCreate}>
                 Create
-            </button>
-            <button onClick={onCancel}>Cancel</button>
+            </Button>
+            <Button onClick={onCancel}>Cancel</Button>
         </div>
     )
 }
+
+const Image = styled.img``
+
+const Text = styled.p``
+
+const Input = styled.input``
+
+const Button = styled.button``
 
 export default App
