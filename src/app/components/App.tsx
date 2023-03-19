@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import logo from '../assets/logo.svg'
 import '../styles/ui.css'
+import { Heading1 } from './Generics'
 
 function App() {
     const textbox = useRef<HTMLInputElement>(undefined)
@@ -32,23 +33,25 @@ function App() {
 
     return (
         <div>
-            <img src={logo} />
-            <Heading>Rectangle Creator</Heading>
-            <p>
-                Count: <input ref={countRef} />
-            </p>
-            <button id="create" onClick={onCreate}>
+            <Image src={logo} alt={'logo'} />
+            <Heading1>Rectangle Creator</Heading1>
+            <Text>
+                Count: <Input ref={countRef} />
+            </Text>
+            <Button id="create" onClick={onCreate}>
                 Create
-            </button>
-            <button onClick={onCancel}>Cancel</button>
+            </Button>
+            <Button onClick={onCancel}>Cancel</Button>
         </div>
     )
 }
 
-const Heading = styled.h1`
-    font-size: 1.5em;
-    text-align: center;
-    color: blue;
-`
+const Image = styled.img``
+
+const Text = styled.p``
+
+const Input = styled.input``
+
+const Button = styled.button``
 
 export default App
