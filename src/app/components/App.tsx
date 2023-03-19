@@ -13,8 +13,7 @@ function App() {
     }, [])
 
     const onCreate = () => {
-        const count = parseInt(textbox.current.value, 10)
-        parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
+        parent.postMessage({ pluginMessage: { type: 'generate-design-system' } }, '*')
     }
 
     const onCancel = () => {
@@ -24,10 +23,9 @@ function App() {
     useEffect(() => {
         // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
-            const { type, message } = event.data.pluginMessage
-            if (type === 'create-rectangles') {
-                console.log(`Figma Says: ${message}`)
-            }
+            const { type, msg } = event.data.pluginMessage
+            if (type === 'generate-design-system')
+                console.log(`Figma Says: ${msg}`)
         }
     }, [])
 
