@@ -19,7 +19,9 @@ const generateColorPaletteFrame = (colors: string[]) => {
         colorDisplayFrame.appendChild(rectangle)
     })
 
-    return colorDisplayFrame
+    figma.currentPage.appendChild(colorDisplayFrame)
+    figma.viewport.scrollAndZoomIntoView([colorDisplayFrame])
+    figma.currentPage.selection = [colorDisplayFrame]
 }
 
 const getAllUniqueColors = (node: SceneNode, uniqueColors: Set<string>) => {
