@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import logo from '../assets/logo.svg'
 import '../styles/ui.css'
 
 function App() {
-    const textbox = React.useRef<HTMLInputElement>(undefined)
+    const textbox = useRef<HTMLInputElement>(undefined)
 
-    const countRef = React.useCallback((element: HTMLInputElement) => {
+    const countRef = useCallback((element: HTMLInputElement) => {
         if (element) element.value = '5'
         textbox.current = element
     }, [])
@@ -19,7 +19,7 @@ function App() {
         parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
             const { type, message } = event.data.pluginMessage
