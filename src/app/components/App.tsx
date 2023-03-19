@@ -22,7 +22,6 @@ function App() {
     }
 
     useEffect(() => {
-        // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
             const { type, msg } = event.data.pluginMessage
             if (type === MsgTypes.GENERATE_DESIGN_SYSTEM)
