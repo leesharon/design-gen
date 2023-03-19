@@ -1,7 +1,7 @@
 const generateColorPaletteFrame = (colors: string[]) => {
     const colorDisplayFrame = figma.createFrame()
     colorDisplayFrame.name = 'Colors'
-    colorDisplayFrame.resize(150, colors.length * 50) // Adjust the size based on the number of unique colors
+    colorDisplayFrame.resize(150, colors.length * 50)
 
     // Create RectangleNodes for each unique color and add them to the FrameNode
     let yOffset = 0
@@ -13,7 +13,7 @@ const generateColorPaletteFrame = (colors: string[]) => {
         rectangle.name = `Color: ${colorString}`
         rectangle.resize(150, 50)
         rectangle.y = yOffset
-        yOffset += 50 // Adjust the offset for the next rectangle
+        yOffset += 50
 
         rectangle.fills = [{ type: 'SOLID', color }]
         colorDisplayFrame.appendChild(rectangle)
