@@ -6,6 +6,33 @@ figma.skipInvisibleInstanceChildren = true
 const selection = figma.currentPage.selection
 console.log('selection:', selection)
 
+const generateColorPalette = (colors: string[]) => {
+    // Create a new FrameNode
+    const colorDisplayFrame = figma.createFrame()
+    colorDisplayFrame.name = 'Colors'
+    colorDisplayFrame.resize(150, colors.length * 50) // Adjust the size based on the number of unique colors
+
+    // Create RectangleNodes for each unique color and add them to the FrameNode
+    let yOffset = 0
+    colors.forEach((colorString) => {
+        const colorArray = colorString.split(',').map(parseFloat)
+        const color: RGB = { r: colorArray[0], g: colorArray[1], b: colorArray[2] }
+
+        const rectangle = figma.createRectangle()
+        rectangle.name = `Color: ${colorString}`
+        rectangle.resize(150, 50)
+        rectangle.y = yOffset
+        yOffset += 50 // Adjust the offset for the next rectangle
+
+        rectangle.fills = [{ type: 'SOLID', color }]
+        colorDisplayFrame.appendChild(rectangle)
+    })
+
+    // Add the FrameNode to the current page
+    figma.currentPage.appendChild(colorDisplayFrame)
+    figma.viewport.scrollAndZoomIntoView([colorDisplayFrame])
+}
+
 const getNodesUniqueColors = (nodes: readonly SceneNode[]) => {
     if (!nodes.length) return
     for (const node of nodes) {
@@ -23,6 +50,7 @@ const getNodesUniqueColors = (nodes: readonly SceneNode[]) => {
             getNodesUniqueColors(node.children as SceneNode[])
         }
     }
+    generateColorPalette([...uniqueColors])
 }
 
 const getFillColors = (paint: any) => {
@@ -33,7 +61,7 @@ const getFillColors = (paint: any) => {
     }
 }
 
-const uniqueColors = new Set()
+const uniqueColors = new Set<string>()
 getNodesUniqueColors(selection)
 
 const allColors = [...uniqueColors]
