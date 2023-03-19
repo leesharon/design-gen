@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
+import { MsgTypes } from '../../enums/MsgTypes.enum'
 import logo from '../assets/logo.svg'
 import '../styles/ui.css'
 import { Heading1 } from './Generics'
@@ -13,7 +14,7 @@ function App() {
     }, [])
 
     const onCreate = () => {
-        parent.postMessage({ pluginMessage: { type: 'generate-design-system' } }, '*')
+        parent.postMessage({ pluginMessage: { type: MsgTypes.GENERATE_DESIGN_SYSTEM } }, '*')
     }
 
     const onCancel = () => {
@@ -21,10 +22,9 @@ function App() {
     }
 
     useEffect(() => {
-        // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
             const { type, msg } = event.data.pluginMessage
-            if (type === 'generate-design-system')
+            if (type === MsgTypes.GENERATE_DESIGN_SYSTEM)
                 console.log(`Figma Says: ${msg}`)
         }
     }, [])

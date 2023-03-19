@@ -1,3 +1,5 @@
+import { genericsUtils } from './generic.utils'
+
 const generateColorPaletteFrame = (colors: string[]) => {
     const colorDisplayFrame = figma.createFrame()
     colorDisplayFrame.name = 'Colors'
@@ -7,10 +9,11 @@ const generateColorPaletteFrame = (colors: string[]) => {
     let yOffset = 0
     colors.forEach((colorString) => {
         const colorArray = colorString.split(',').map(parseFloat)
-        const color: RGB = { r: colorArray[0], g: colorArray[1], b: colorArray[2] }
+        const [r, g, b] = colorArray
+        const color: RGB = { r, g, b }
 
         const rectangle = figma.createRectangle()
-        rectangle.name = `Color: ${colorString}`
+        rectangle.name = `Color: ${genericsUtils.decimalRgbToHex(r, g, b)}`
         rectangle.resize(150, 50)
         rectangle.y = yOffset
         yOffset += 50
@@ -19,7 +22,10 @@ const generateColorPaletteFrame = (colors: string[]) => {
         colorDisplayFrame.appendChild(rectangle)
     })
 
-    return colorDisplayFrame
+    const newPage = figma.createPage()
+    newPage.name = 'Colors'
+    newPage.appendChild(colorDisplayFrame)
+    figma.root.appendChild(newPage)
 }
 
 const getAllUniqueColors = (node: SceneNode, uniqueColors: Set<string>) => {
