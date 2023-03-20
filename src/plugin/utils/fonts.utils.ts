@@ -1,32 +1,26 @@
 import { genericsUtils } from './generic.utils'
 
-const getNodeUniqueFonts = (node: TextNode, uniqueFonts: Set<FontName | typeof figma.mixed>): Set<FontName | typeof figma.mixed> => {
-    if (node.fontName !== undefined && node.fontName !== null) {
-        const fontString = node.fontName
-        uniqueFonts.add(fontString)
+const getNodeUniqueFonts = (node: TextNode, uniqueFonts: Array<FontName | typeof figma.mixed>): Array<FontName> => {
+    if (node.fontName !== undefined 
+        && node.fontName !== null 
+        && node.fontName !== figma.mixed) { 
+        uniqueFonts.push(node.fontName)
     }
-    return uniqueFonts
+    return uniqueFonts as Array<FontName>
 }
 
-const generateFontPaletteFrame = async (fontsArr: Array<FontName | typeof figma.mixed>) => {
+const generateFontPaletteFrame = async (fontsArr: FontName[]) => {
     if (!fontsArr.length) return
-
     // Create a new frame
     const fontDisplayFrame = figma.createFrame()
     fontDisplayFrame.name = 'Fonts'
     // Resize the frame to fit all the text nodes
     fontDisplayFrame.resize(150, fontsArr.length * 50)
 
+    await loadFontsFromArray(fontsArr)
+    
     let yOffset = 0
     for (const fontNameObj of fontsArr) {
-        if (fontNameObj === figma.mixed) {
-            console.log('Skipping mixed font:', fontNameObj)
-            continue
-        }
-
-        // Load the relevant font
-        await figma.loadFontAsync(fontNameObj)
-
         // Create a new text node
         const textNode = figma.createText()
 
@@ -53,5 +47,14 @@ const generateFontPaletteFrame = async (fontsArr: Array<FontName | typeof figma.
 export const fontsUtils = {
     getNodeUniqueFonts,
     generateFontPaletteFrame,
+}
+
+async function loadFontsFromArray(filteredFontsArr: FontName[]) {
+    for (const fontNameObj of filteredFontsArr) {
+        console.log('Loading font:', fontNameObj)
+        figma.loadFontAsync(fontNameObj)
+        console.log('Font loaded')
+        
+    }
 }
 

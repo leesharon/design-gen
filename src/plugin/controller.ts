@@ -31,7 +31,7 @@ async function generateDesignSystem() {
         return msgsUtils.postMsg(MsgTypes.NO_SELECTION, Strings.NO_SELECTION)
 
     const uniqueColors = new Set<string>()
-    const uniqueFonts = new Set<FontName | typeof figma.mixed>()
+    const uniqueFonts = new Array<FontName>()
 
     const iterateThroughAllNodes = (nodes: readonly SceneNode[]) => {
         if (!nodes.length) return
@@ -57,7 +57,7 @@ async function generateDesignSystem() {
     iterateThroughAllNodes(selection)
 
     colorsUtils.generateColorPaletteFrame(uniqueColors)
-    await fontsUtils.generateFontPaletteFrame([...uniqueFonts])
+    await fontsUtils.generateFontPaletteFrame(uniqueFonts)
 
     msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.GENERATE_DESIGN_SYSTEM)
 
