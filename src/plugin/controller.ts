@@ -32,6 +32,7 @@ async function generateDesignSystem() {
 
     const uniqueColors = new Set<string>()
     const uniqueFonts = new Array<FontName>()
+    const uniqueFontsJSON = new Array<string>()
 
     const iterateThroughAllNodes = (nodes: readonly SceneNode[]) => {
         if (!nodes.length) return
@@ -50,7 +51,13 @@ async function generateDesignSystem() {
 
             ) iterateThroughAllNodes(node.children as SceneNode[])
 
-            else if (type === 'TEXT') fontsUtils.getNodeUniqueFonts(node as TextNode, uniqueFonts)
+            else if (type === 'TEXT' &&
+                node.fontName &&
+                node.fontName !== figma.mixed &&
+                !uniqueFontsJSON.includes(JSON.stringify(node.fontName))) {
+                uniqueFonts.push(node.fontName)
+                uniqueFontsJSON.push(JSON.stringify(node.fontName))
+            }
         }
     }
 
