@@ -9,25 +9,27 @@ const getNodeUniqueFonts = (node: TextNode, uniqueFonts: Set<FontName | typeof f
 }
 
 const generateFontPaletteFrame = async (fontsArr: Array<FontName | typeof figma.mixed>) => {
+    if (!fontsArr.length) return
+
     // Create a new frame
     const fontDisplayFrame = figma.createFrame()
     fontDisplayFrame.name = 'Fonts'
     // Resize the frame to fit all the text nodes
     fontDisplayFrame.resize(150, fontsArr.length * 50)
-    
+
     let yOffset = 0
     for (const fontNameObj of fontsArr) {
-        if(fontNameObj === figma.mixed) {
+        if (fontNameObj === figma.mixed) {
             console.log('Skipping mixed font:', fontNameObj)
             continue
         }
 
         // Load the relevant font
         await figma.loadFontAsync(fontNameObj)
-        
+
         // Create a new text node
         const textNode = figma.createText()
-        
+
         // Set the font family, style and size
         textNode.fontName = fontNameObj
         textNode.fontSize = 16

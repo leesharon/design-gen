@@ -1,6 +1,8 @@
 /* eslint-disable indent */
+import { Strings } from '../constants'
 import { MsgTypes } from '../enums/MsgTypes.enum'
 import { colorsUtils } from './utils/colors.utils'
+import { msgsUtils } from './utils/msgs.utils'
 import { fontsUtils } from './utils/fonts.utils'
 
 figma.showUI(__html__)
@@ -25,6 +27,8 @@ async function generateDesignSystem() {
     console.log('Generating Design System...')
 
     const { selection } = figma.currentPage
+    if (!selection.length)
+        return msgsUtils.postMsg(MsgTypes.NO_SELECTION, Strings.NO_SELECTION)
 
     const uniqueColors = new Set<string>()
     const uniqueFonts = new Set<FontName | typeof figma.mixed>()
@@ -34,30 +38,30 @@ async function generateDesignSystem() {
         for (const node of nodes) {
             // Gets All Colors for the Palette
             colorsUtils.getAllUniqueColors(node, uniqueColors)
-            
+
             const { type } = node
-            
+
             // Handles nested children nodes
             if ((type === 'FRAME' ||
-            type === 'COMPONENT' ||
-            type === 'INSTANCE' ||
-            type === 'GROUP') &&
-            node.children.length
-            
+                type === 'COMPONENT' ||
+                type === 'INSTANCE' ||
+                type === 'GROUP') &&
+                node.children.length
+
             ) iterateThroughAllNodes(node.children as SceneNode[])
 
-            else if(type === 'TEXT') fontsUtils.getNodeUniqueFonts(node as TextNode, uniqueFonts)
+            else if (type === 'TEXT') fontsUtils.getNodeUniqueFonts(node as TextNode, uniqueFonts)
         }
     }
 
     iterateThroughAllNodes(selection)
 
-    colorsUtils.generateColorPaletteFrame([...uniqueColors])
+    colorsUtils.generateColorPaletteFrame(uniqueColors)
     await fontsUtils.generateFontPaletteFrame([...uniqueFonts])
+
+    msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.GENERATE_DESIGN_SYSTEM)
 
     console.log('Design System Generated!')
 
-    // ? Close the plugin?
     figma.closePlugin()
 }
-

@@ -21,6 +21,11 @@ function App() {
             if (type === MsgTypes.GENERATE_DESIGN_SYSTEM)
                 console.log(`Figma Says: ${msg}`)
         }
+        window.onmessage = (event) => {
+            const { type, msg } = event.data.pluginMessage
+            if (type === MsgTypes.NO_SELECTION)
+                console.log(`Figma Says: ${msg}`)
+        }
     }, [])
 
     return (
