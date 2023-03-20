@@ -1,4 +1,4 @@
-import { genericsUtils } from './utils.service'
+import { genericsUtils } from './generic.utils'
 
 const getNodeUniqueFonts = (node: TextNode, uniqueFonts: Set<FontName | typeof figma.mixed>): Set<FontName | typeof figma.mixed> => {
     if (node.fontName !== undefined && node.fontName !== null) {

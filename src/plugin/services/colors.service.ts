@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { genericsUtils } from './utils.service'
+import { genericsUtils } from './generic.utils'
 
 const generateColorPaletteFrame = (colors: Set<string>) => {
     if (!colors.size) return

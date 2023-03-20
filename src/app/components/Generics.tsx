@@ -1,9 +1,7 @@
 import styled from 'styled-components'
 
-const MainLayout = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  padding: 0 30px;
+const ScreenContainer = styled.div`
+  padding: 28px 20px 20px;
 `
 
 const FlexRow = styled.div<{
@@ -62,7 +60,7 @@ export {
     PrimaryButton,
     FlexRow,
     FlexColumn,
-    MainLayout,
+    ScreenContainer,
     Heading1,
     Heading3,
     Heading5,

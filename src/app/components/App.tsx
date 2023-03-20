@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { MsgTypes } from '../../enums/MsgTypes.enum'
 import logo from '../assets/logo.svg'
 import '../styles/ui.css'
-import { Heading1 } from './Generics'
+import '../styles/global.css'
+import { Heading1, ScreenContainer } from './Generics'
 
 function App() {
 
@@ -29,14 +30,14 @@ function App() {
     }, [])
 
     return (
-        <div>
+        <ScreenContainer>
             <Image src={logo} alt={'logo'} />
             <Heading1>DesignGen</Heading1>
             <Button id="create" onClick={onCreate}>
                 Create
             </Button>
             <Button onClick={onClose}>Close</Button>
-        </div>
+        </ScreenContainer>
     )
 }
 

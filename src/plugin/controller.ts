@@ -2,10 +2,12 @@
 import { Strings } from '../constants'
 import { MsgTypes } from '../enums/MsgTypes.enum'
 import { colorsUtils } from './services/colors.service'
-import { msgsUtils } from './services/msgs.service'
+import { msgsUtils } from './services/msgs.utils'
 import { fontsUtils } from './services/fonts.service'
 
 figma.showUI(__html__)
+
+figma.ui.resize(380, 540)
 
 figma.skipInvisibleInstanceChildren = true
 
