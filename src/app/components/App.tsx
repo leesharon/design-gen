@@ -4,7 +4,7 @@ import { MsgTypes } from '../../enums/MsgTypes.enum'
 import logo from '../assets/logo.svg'
 import '../styles/ui.css'
 import '../styles/global.css'
-import { Heading1, ScreenContainer } from './Generics'
+import { Heading3, Heading5, ScreenContainer } from './Generics'
 
 function App() {
 
@@ -30,18 +30,28 @@ function App() {
     }, [])
 
     return (
-        <ScreenContainer>
-            <Image src={logo} alt={'logo'} />
-            <Heading1>DesignGen</Heading1>
+        <ScreenContainer gap={50} justify={'space-around'}>
+            <ImgContainer>
+                <Img src={logo} alt={'logo'} />
+                <Heading3>Select screens to get started</Heading3>
+            </ImgContainer>
+            <Heading5>Select elements to generate</Heading5>
             <Button id="create" onClick={onCreate}>
                 Create
             </Button>
-            <Button onClick={onClose}>Close</Button>
         </ScreenContainer>
     )
 }
 
-const Image = styled.img``
+const ImgContainer = styled.div`
+
+`
+
+const Img = styled.img`
+    width: 116px;
+    height: 116px;
+    margin-bottom: 16px;
+`
 
 const Button = styled.button``
 

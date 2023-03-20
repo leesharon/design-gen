@@ -1,7 +1,17 @@
 import styled from 'styled-components'
 
-const ScreenContainer = styled.div`
+const ScreenContainer = styled.div<{
+    gap?: number;
+    justify?: string;
+    align?: string;
+}>`
+  display: flex;
+  flex-direction: column;
   padding: 28px 20px 20px;
+  height: 100%;
+  ${({ gap }) => gap && `gap: ${gap}px`};
+  ${({ justify }) => justify && `justify-content: ${justify}`};
+  ${({ align }) => align && `align-items: ${align}`};
 `
 
 const FlexRow = styled.div<{
