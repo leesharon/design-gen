@@ -1,4 +1,4 @@
-import { genericsUtils } from './generic.utils'
+import { genericsUtils } from './utils.service'
 
 const generateFontPaletteFrame = async (fontsArr: FontName[]) => {
     if (!fontsArr.length) return
