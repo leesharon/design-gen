@@ -30,18 +30,19 @@ function generateDesignSystem() {
         for (const node of nodes) {
             // Gets All Colors for the Palette
             colorsUtils.getAllUniqueColors(node, uniqueColors)
-
-            if(node.type === 'TEXT') fontsUtils.getNodeUniqueFonts(node as TextNode, uniqueFonts)
-
-            // Handles nested children nodes
+            
             const { type } = node
+            
+            // Handles nested children nodes
             if ((type === 'FRAME' ||
-                type === 'COMPONENT' ||
-                type === 'INSTANCE' ||
-                type === 'GROUP') &&
-                node.children.length
-
+            type === 'COMPONENT' ||
+            type === 'INSTANCE' ||
+            type === 'GROUP') &&
+            node.children.length
+            
             ) iterateThroughAllNodes(node.children as SceneNode[])
+            
+            else if(type === 'TEXT') fontsUtils.getNodeUniqueFonts(node as TextNode, uniqueFonts)
         }
     }
 
