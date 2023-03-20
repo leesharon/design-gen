@@ -1,5 +1,5 @@
 Todo's
 
 - handle gradients
-- can we do icons
 - how to go to figma store
+- check on which kind of nodes we will apply color
