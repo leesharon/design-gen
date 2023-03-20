@@ -1,6 +1,8 @@
 /* eslint-disable indent */
+import { Strings } from '../constants'
 import { MsgTypes } from '../enums/MsgTypes.enum'
 import { colorsUtils } from './utils/colors.utils'
+import { msgsUtils } from './utils/msgs.utils'
 
 figma.showUI(__html__)
 
@@ -14,12 +16,12 @@ figma.ui.onmessage = (msg) => {
         default:
             break
     }
-
-    figma.closePlugin()
 }
 
 function generateDesignSystem() {
     const { selection } = figma.currentPage
+    if (!selection.length)
+        return msgsUtils.postMsg(MsgTypes.NO_SELECTION, Strings.NO_SELECTION)
 
     const uniqueColors = new Set<string>()
 
@@ -43,31 +45,9 @@ function generateDesignSystem() {
 
     iterateThroughAllNodes(selection)
 
-    colorsUtils.generateColorPaletteFrame([...uniqueColors])
+    colorsUtils.generateColorPaletteFrame(uniqueColors)
 
-    figma.ui.postMessage({
-        type: MsgTypes.GENERATE_DESIGN_SYSTEM,
-        msg: 'Created design system! Rectangles',
-    })
+    msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.GENERATE_DESIGN_SYSTEM)
+
+    figma.closePlugin()
 }
-
-// function createRectangles(msg: { count: number }) {
-//     const nodes = []
-
-//     for (let i = 0; i < msg.count; i++) {
-//         const rect = figma.createRectangle()
-//         rect.x = i * 150
-//         rect.fills = [{ type: 'SOLID', color: { r: 1, g: 0.5, b: 0 } }]
-//         figma.currentPage.appendChild(rect)
-//         nodes.push(rect)
-//     }
-
-//     figma.currentPage.selection = nodes
-//     figma.viewport.scrollAndZoomIntoView(nodes)
-
-//     // This is how figma responds back to the ui
-//     figma.ui.postMessage({
-//         type: 'create-rectangles',
-//         message: `Created ${msg.count} Rectangles`,
-//     })
-// }
