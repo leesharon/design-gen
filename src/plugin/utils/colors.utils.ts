@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { genericsUtils } from './generic.utils'
 
 const generateColorPaletteFrame = (colors: string[]) => {
@@ -5,7 +6,6 @@ const generateColorPaletteFrame = (colors: string[]) => {
     colorDisplayFrame.name = 'Colors'
     colorDisplayFrame.resize(150, colors.length * 50)
 
-    // Create RectangleNodes for each unique color and add them to the FrameNode
     let yOffset = 0
     colors.forEach((colorString) => {
         const colorArray = colorString.split(',').map(parseFloat)
@@ -13,7 +13,7 @@ const generateColorPaletteFrame = (colors: string[]) => {
         const color: RGB = { r, g, b }
 
         const rectangle = figma.createRectangle()
-        rectangle.name = `Color: ${genericsUtils.decimalRgbToHex(r, g, b)}`
+        rectangle.name = genericsUtils.decimalRgbToHex(r, g, b)
         rectangle.resize(150, 50)
         rectangle.y = yOffset
         yOffset += 50
@@ -22,22 +22,39 @@ const generateColorPaletteFrame = (colors: string[]) => {
         colorDisplayFrame.appendChild(rectangle)
     })
 
+    if (figma.root.children.find((page) => page.name === 'Colors')) console.log(true)
     const newPage = figma.createPage()
-    newPage.name = 'Colors'
+    newPage.name = 'Colors by DesignGen'
     newPage.appendChild(colorDisplayFrame)
     figma.root.appendChild(newPage)
 }
 
 const getAllUniqueColors = (node: SceneNode, uniqueColors: Set<string>) => {
+    console.log(node.name)
     if ('fills' in node && Array.isArray(node.fills)) {
         for (const paint of node.fills) {
-            if (paint.type === 'SOLID') {
-                const { r, g, b } = paint.color
-                const colorString = `${r},${g},${b}`
-                uniqueColors.add(colorString)
+            console.log(paint.type)
+            console.log(paint)
+            switch (paint.type) {
+                case 'SOLID':
+                    addRgbToSet(paint.color, uniqueColors)
             }
         }
     }
+    if ('strokes' in node && Array.isArray(node.strokes)) {
+        for (const paint of node.strokes) {
+            switch (paint.type) {
+                case 'SOLID':
+                    addRgbToSet(paint.color, uniqueColors)
+            }
+        }
+    }
+}
+
+function addRgbToSet(rgb: RGB, uniqueColors: Set<string>) {
+    const { r, g, b } = rgb
+    const colorString = `${r.toFixed(3)},${g.toFixed(3)},${b.toFixed(3)}`
+    uniqueColors.add(colorString)
 }
 
 export const colorsUtils = {

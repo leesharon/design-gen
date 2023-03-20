@@ -17,6 +17,8 @@ function decimalRgbToHex(r, g, b) {
     return rgbToHex(rInt, gInt, bInt)
 }
 
+
+
 export const genericsUtils = {
     rgbToHex,
     decimalRgbToHex
