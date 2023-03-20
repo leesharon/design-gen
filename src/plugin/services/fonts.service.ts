@@ -1,16 +1,7 @@
 import { genericsUtils } from './generic.utils'
 
-const getNodeUniqueFonts = (node: TextNode, uniqueFonts: Set<FontName | typeof figma.mixed>): Set<FontName | typeof figma.mixed> => {
-    if (node.fontName !== undefined && node.fontName !== null) {
-        const fontString = node.fontName
-        uniqueFonts.add(fontString)
-    }
-    return uniqueFonts
-}
-
-const generateFontPaletteFrame = async (fontsArr: Array<FontName | typeof figma.mixed>) => {
+const generateFontPaletteFrame = async (fontsArr: FontName[]) => {
     if (!fontsArr.length) return
-
     // Create a new frame
     const fontDisplayFrame = figma.createFrame()
     fontDisplayFrame.name = 'Fonts'
@@ -19,23 +10,18 @@ const generateFontPaletteFrame = async (fontsArr: Array<FontName | typeof figma.
 
     let yOffset = 0
     for (const fontNameObj of fontsArr) {
-        if (fontNameObj === figma.mixed) {
-            console.log('Skipping mixed font:', fontNameObj)
-            continue
-        }
-
-        // Load the relevant font
-        await figma.loadFontAsync(fontNameObj)
-
         // Create a new text node
         const textNode = figma.createText()
+
+        // Load the font if it exists, otherwise skip it
+        if (!await doesFontExist(fontNameObj)) continue
 
         // Set the font family, style and size
         textNode.fontName = fontNameObj
         textNode.fontSize = 16
 
         // Set the text content to indicate the font family
-        textNode.characters = fontNameObj.family
+        textNode.characters = `${fontNameObj.family}, ${fontNameObj.style}`
 
         // Set the text color and alignment
         textNode.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }]
@@ -45,13 +31,26 @@ const generateFontPaletteFrame = async (fontsArr: Array<FontName | typeof figma.
         textNode.y = yOffset
         yOffset += 50
 
+        console.log('textNode:', textNode)
+
         fontDisplayFrame.appendChild(textNode)
     }
     genericsUtils.createNewPageFromFrame(fontDisplayFrame)
 }
 
 export const fontsUtils = {
-    getNodeUniqueFonts,
     generateFontPaletteFrame,
+}
+
+async function doesFontExist(fontNameObj: FontName): Promise<boolean> {
+    let doesFontExist = false
+    await figma.loadFontAsync(fontNameObj).then(() => {
+        console.log('Font loaded:', fontNameObj)
+        doesFontExist = true
+    }).catch(() => {
+        console.log('Font not found:', fontNameObj)
+        doesFontExist = false
+    })
+    return doesFontExist
 }
 

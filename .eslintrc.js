@@ -29,5 +29,6 @@ module.exports = {
             "error",
             4
         ],
+        'switch-indent': 'allow',
     },
 };

@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { Strings } from '../constants'
 import { MsgTypes } from '../enums/MsgTypes.enum'
 import { colorsUtils } from './services/colors.service'
@@ -13,15 +12,15 @@ figma.skipInvisibleInstanceChildren = true
 
 figma.ui.onmessage = (msg) => {
     switch (msg.type) {
-        case MsgTypes.GENERATE_DESIGN_SYSTEM:
-            generateDesignSystem()
-            return
-        case MsgTypes.CLOSE_PLUGIN:
-            figma.closePlugin()
-            return
-        default:
-            console.log('Unknown message type:', msg.type)
-            return
+    case MsgTypes.GENERATE_DESIGN_SYSTEM:
+        generateDesignSystem()
+        return
+    case MsgTypes.CLOSE_PLUGIN:
+        figma.closePlugin()
+        return
+    default:
+        console.log('Unknown message type:', msg.type)
+        return
     }
 }
 
@@ -33,7 +32,8 @@ async function generateDesignSystem() {
         return msgsUtils.postMsg(MsgTypes.NO_SELECTION, Strings.NO_SELECTION)
 
     const uniqueColors = new Set<string>()
-    const uniqueFonts = new Set<FontName | typeof figma.mixed>()
+    const uniqueFonts = new Array<FontName>()
+    const uniqueFontsJSON = new Array<string>()
 
     const iterateThroughAllNodes = (nodes: readonly SceneNode[]) => {
         if (!nodes.length) return
@@ -55,22 +55,28 @@ async function generateDesignSystem() {
 
             ) iterateThroughAllNodes(node.children as SceneNode[])
 
-            else if (type === 'TEXT') fontsUtils.getNodeUniqueFonts(node as TextNode, uniqueFonts)
+            else if (type === 'TEXT' &&
+                node.fontName &&
+                node.fontName !== figma.mixed &&
+                !uniqueFontsJSON.includes(JSON.stringify(node.fontName))) {
+                uniqueFonts.push(node.fontName)
+                uniqueFontsJSON.push(JSON.stringify(node.fontName))
+            }
         }
     }
 
     iterateThroughAllNodes(selection)
 
     colorsUtils.generateColorPaletteFrame(uniqueColors)
-    await fontsUtils.generateFontPaletteFrame([...uniqueFonts])
+    await fontsUtils.generateFontPaletteFrame(uniqueFonts)
 
-    if (uniqueColors.size || uniqueFonts.size) {
+    if (uniqueColors.size || uniqueFonts.length) {
         console.log(Strings.DESIGN_SYSTEM_GENERATED)
         msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.DESIGN_SYSTEM_GENERATED)
+
         figma.closePlugin()
     } else {
         console.log(Strings.NO_ELEMENTS_FOUND)
         msgsUtils.postMsg(MsgTypes.NO_ELEMENTS_FOUND, Strings.NO_ELEMENTS_FOUND)
-
     }
 }
