@@ -21,20 +21,13 @@ const generateColorPaletteFrame = (colors: Set<string>) => {
         rectangle.fills = [{ type: 'SOLID', color }]
         colorDisplayFrame.appendChild(rectangle)
     })
-
-    if (figma.root.children.find((page) => page.name === 'Colors')) console.log(true)
-    const newPage = figma.createPage()
-    newPage.name = 'Colors by DesignGen'
-    newPage.appendChild(colorDisplayFrame)
-    figma.root.appendChild(newPage)
+    genericsUtils.createNewPageFromFrame(colorDisplayFrame)
 }
 
+
 const getAllUniqueColors = (node: SceneNode, uniqueColors: Set<string>) => {
-    console.log(node.name)
     if ('fills' in node && Array.isArray(node.fills)) {
         for (const paint of node.fills) {
-            console.log(paint.type)
-            console.log(paint)
             switch (paint.type) {
                 case 'SOLID':
                     addRgbToSet(paint.color, uniqueColors)
