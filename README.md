@@ -28,5 +28,5 @@ This repo is using:
 ---
 
 ## Authors
-- [Nitzan Pappini](https://github.com/nitzanpap)
+- [Nitzan Papini](https://github.com/nitzanpap)
 - [Lee Sharon](https://github.com/leesharon)
