@@ -1,9 +1,9 @@
 /* eslint-disable indent */
 import { Strings } from '../constants'
 import { MsgTypes } from '../enums/MsgTypes.enum'
-import { colorsUtils } from './utils/colors.utils'
-import { msgsUtils } from './utils/msgs.utils'
-import { fontsUtils } from './utils/fonts.utils'
+import { colorsUtils } from './services/colors.service'
+import { msgsUtils } from './services/msgs.service'
+import { fontsUtils } from './services/fonts.service'
 
 figma.showUI(__html__)
 
@@ -37,10 +37,8 @@ async function generateDesignSystem() {
         if (!nodes.length) return
 
         for (const node of nodes) {
-            if (
-                node.type === 'VECTOR' ||
-                node.name.toLocaleLowerCase().includes('icon')
-            ) continue
+            //! skip icons for now
+            if (node.name.toLocaleLowerCase().includes('icon')) continue
 
             // Gets All Colors for the Palette
             colorsUtils.getAllUniqueColors(node, uniqueColors)
