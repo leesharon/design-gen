@@ -35,13 +35,18 @@ async function generateDesignSystem() {
 
     const iterateThroughAllNodes = (nodes: readonly SceneNode[]) => {
         if (!nodes.length) return
+
         for (const node of nodes) {
+            if (
+                node.type === 'VECTOR' ||
+                node.name.toLocaleLowerCase().includes('icon')
+            ) continue
+
             // Gets All Colors for the Palette
             colorsUtils.getAllUniqueColors(node, uniqueColors)
 
-            const { type } = node
-
             // Handles nested children nodes
+            const { type } = node
             if ((type === 'FRAME' ||
                 type === 'COMPONENT' ||
                 type === 'INSTANCE' ||
@@ -59,9 +64,13 @@ async function generateDesignSystem() {
     colorsUtils.generateColorPaletteFrame(uniqueColors)
     await fontsUtils.generateFontPaletteFrame([...uniqueFonts])
 
-    msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.GENERATE_DESIGN_SYSTEM)
+    if (uniqueColors.size || uniqueFonts.size) {
+        console.log(Strings.DESIGN_SYSTEM_GENERATED)
+        msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.DESIGN_SYSTEM_GENERATED)
+        figma.closePlugin()
+    } else {
+        console.log(Strings.NO_ELEMENTS_FOUND)
+        msgsUtils.postMsg(MsgTypes.NO_ELEMENTS_FOUND, Strings.NO_ELEMENTS_FOUND)
 
-    console.log('Design System Generated!')
-
-    figma.closePlugin()
+    }
 }
