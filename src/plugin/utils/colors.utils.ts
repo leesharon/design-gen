@@ -2,6 +2,7 @@
 import { genericsUtils } from './generic.utils'
 
 const generateColorPaletteFrame = (colors: Set<string>) => {
+    if (!colors.size) return
     const colorDisplayFrame = figma.createFrame()
     colorDisplayFrame.name = 'Colors'
     colorDisplayFrame.resize(150, colors.size * 50)
