@@ -21,12 +21,9 @@ const generateColorPaletteFrame = (colors: string[]) => {
         rectangle.fills = [{ type: 'SOLID', color }]
         colorDisplayFrame.appendChild(rectangle)
     })
-
-    const newPage = figma.createPage()
-    newPage.name = 'Colors'
-    newPage.appendChild(colorDisplayFrame)
-    figma.root.appendChild(newPage)
+    genericsUtils.createNewPageFromFrame(colorDisplayFrame)
 }
+
 
 const getAllUniqueColors = (node: SceneNode, uniqueColors: Set<string>) => {
     if ('fills' in node && Array.isArray(node.fills)) {

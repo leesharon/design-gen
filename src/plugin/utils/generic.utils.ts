@@ -17,7 +17,16 @@ function decimalRgbToHex(r, g, b) {
     return rgbToHex(rInt, gInt, bInt)
 }
 
+const createNewPageFromFrame = (frame: FrameNode) => {
+    const newPage = figma.createPage()
+    newPage.name = frame.name
+    newPage.appendChild(frame)
+    figma.currentPage = newPage
+    figma.root.appendChild(newPage)
+}
+
 export const genericsUtils = {
     rgbToHex,
-    decimalRgbToHex
+    decimalRgbToHex,
+    createNewPageFromFrame,
 }

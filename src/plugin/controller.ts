@@ -11,15 +11,17 @@ figma.ui.onmessage = (msg) => {
     switch (msg.type) {
         case MsgTypes.GENERATE_DESIGN_SYSTEM:
             generateDesignSystem()
+            console.log('Generating Design System')
+            
             break
+        case MsgTypes.CLOSE_PLUGIN:
+            figma.closePlugin()
         default:
             break
     }
-
-    figma.closePlugin()
 }
 
-function generateDesignSystem() {
+async function generateDesignSystem() {
     const { selection } = figma.currentPage
 
     const uniqueColors = new Set<string>()
@@ -41,7 +43,7 @@ function generateDesignSystem() {
             node.children.length
             
             ) iterateThroughAllNodes(node.children as SceneNode[])
-            
+
             else if(type === 'TEXT') fontsUtils.getNodeUniqueFonts(node as TextNode, uniqueFonts)
         }
     }
@@ -49,6 +51,7 @@ function generateDesignSystem() {
     iterateThroughAllNodes(selection)
 
     colorsUtils.generateColorPaletteFrame([...uniqueColors])
+    await fontsUtils.generateFontPaletteFrame([...uniqueFonts])
     
 
     figma.ui.postMessage({
