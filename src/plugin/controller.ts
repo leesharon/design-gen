@@ -11,17 +11,19 @@ figma.ui.onmessage = (msg) => {
     switch (msg.type) {
         case MsgTypes.GENERATE_DESIGN_SYSTEM:
             generateDesignSystem()
-            console.log('Generating Design System')
-            
-            break
+            return
         case MsgTypes.CLOSE_PLUGIN:
             figma.closePlugin()
+            return
         default:
-            break
+            console.log('Unknown message type:', msg.type)
+            return
     }
 }
 
 async function generateDesignSystem() {
+    console.log('Generating Design System...')
+
     const { selection } = figma.currentPage
 
     const uniqueColors = new Set<string>()
@@ -52,10 +54,10 @@ async function generateDesignSystem() {
 
     colorsUtils.generateColorPaletteFrame([...uniqueColors])
     await fontsUtils.generateFontPaletteFrame([...uniqueFonts])
-    
 
-    figma.ui.postMessage({
-        type: MsgTypes.GENERATE_DESIGN_SYSTEM,
-        msg: 'Created design system! Rectangles',
-    })
+    console.log('Design System Generated!')
+
+    // ? Close the plugin?
+    figma.closePlugin()
 }
+

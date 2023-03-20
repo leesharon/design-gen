@@ -1,4 +1,4 @@
-function rgbToHex(r: number, g: number, b: number) {
+function rgbToHex(r: number, g: number, b: number): string {
     return (
         '#' +
         [r, g, b]
@@ -10,14 +10,14 @@ function rgbToHex(r: number, g: number, b: number) {
     )
 }
 
-function decimalRgbToHex(r, g, b) {
+function decimalRgbToHex(r: number, g: number, b: number): string {
     const rInt = Math.round(r * 255)
     const gInt = Math.round(g * 255)
     const bInt = Math.round(b * 255)
     return rgbToHex(rInt, gInt, bInt)
 }
 
-const createNewPageFromFrame = (frame: FrameNode) => {
+function createNewPageFromFrame(frame: FrameNode): void {
     const newPage = figma.createPage()
     newPage.name = frame.name
     newPage.appendChild(frame)
