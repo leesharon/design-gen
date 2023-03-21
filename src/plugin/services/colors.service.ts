@@ -1,3 +1,4 @@
+import { colorSortingService } from './color-sorting.service';
 /* eslint-disable indent */
 import { genericsUtils } from './generic.utils'
 
@@ -7,8 +8,10 @@ const generateColorPaletteFrame = (colors: Set<string>) => {
     colorDisplayFrame.name = 'Colors'
     colorDisplayFrame.resize(150, colors.size * 50)
 
+    const sortedColors = colorSortingService.sortColorsByHueAndLuminance([...colors])
+
     let yOffset = 0
-    colors.forEach((colorString) => {
+    sortedColors.forEach((colorString) => {
         const colorArray = colorString.split(',').map(parseFloat)
         const [r, g, b] = colorArray
         const color: RGB = { r, g, b }
@@ -24,7 +27,6 @@ const generateColorPaletteFrame = (colors: Set<string>) => {
     })
     genericsUtils.createNewPageFromFrame(colorDisplayFrame)
 }
-
 
 const getAllUniqueColors = (node: SceneNode, uniqueColors: Set<string>) => {
     if ('fills' in node && Array.isArray(node.fills)) {
