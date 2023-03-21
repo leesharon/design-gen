@@ -5,9 +5,12 @@ const generateFontPaletteFrame = async (fontsSet: Set<string>) => {
     // Create a new frame
     const fontDisplayFrame = figma.createFrame()
     fontDisplayFrame.name = 'Fonts'
+    const frameWidth = 2000
+    const lineHeight = 100
+    const frameHeight = fontsSet.size * lineHeight
 
     // Resize the frame to fit all the text nodes
-    fontDisplayFrame.resize(150, fontsSet.size * 50)
+    fontDisplayFrame.resize(frameWidth, frameHeight)
 
     let yOffset = 0
     for (const appTextNodeStr of fontsSet) {
@@ -30,7 +33,7 @@ const generateFontPaletteFrame = async (fontsSet: Set<string>) => {
         newTextNode.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }]
         newTextNode.textAlignHorizontal = 'LEFT'
         newTextNode.textAlignVertical = 'CENTER'
-        newTextNode.resize(150, 50)
+        newTextNode.resize(frameWidth, lineHeight)
         newTextNode.y = yOffset
         yOffset += 50
 
