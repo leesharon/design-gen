@@ -1,68 +1,47 @@
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Colors } from '../../constants'
-import { FlexColumn, Heading5 } from './Generics'
+import CustomCheckbox from './Checkbox'
+import { Heading5 } from './Generics'
 
 interface Props {
-    isDisabled: boolean
+    isFormDisabled: boolean
+    setIsFormValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const MainForm: FunctionComponent<Props> = ({ isDisabled }) => {
+const MainForm: FunctionComponent<Props> = ({ isFormDisabled, setIsFormValid }) => {
 
     const [colorsChecked, setColorsChecked] = useState(false)
     const [fontsChecked, setFontsChecked] = useState(false)
-    const [selectAllChecked, setSelectAllChecked] = useState(false)
 
-    const handleSelectAllChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-        const { checked } = ev.target
-        setSelectAllChecked(checked)
-        setColorsChecked(checked)
-        setFontsChecked(checked)
-    }
+    useEffect(() => {
+        if (colorsChecked || fontsChecked)
+            setIsFormValid(true)
+        else setIsFormValid(false)
 
-    const handleSingleCheckboxChange = () => {
-        setSelectAllChecked(colorsChecked && fontsChecked)
-    }
-
+    }, [colorsChecked, fontsChecked])
 
     return (
-        <FormContainer color={isDisabled ? Colors.GRAY_500 : Colors.BLACK}>
+        <FormContainer color={isFormDisabled ? Colors.BLACK : Colors.BLACK}>
             <Heading5 fontSize={'14px'}>Select elements to generate</Heading5>
-            <ElementsForm>
-                <Label>
-                    <Checkbox
-                        type="checkbox"
-                        checked={colorsChecked}
-                        onChange={() => {
-                            setColorsChecked(prevState => !prevState)
-                            handleSingleCheckboxChange()
-                        }}
-                    />
-                    Colors
-                </Label>
-                <Label>
-                    <Checkbox
-                        type="checkbox"
-                        checked={fontsChecked}
-                        onChange={() => {
-                            setFontsChecked(prevState => !prevState)
-                            handleSingleCheckboxChange()
-                        }}
-                    />
-                    Fonts
-                </Label>
-                <Label>
-                    <Checkbox
-                        type="checkbox"
-                        checked={selectAllChecked}
-                        onChange={(ev) => {
-                            setSelectAllChecked(prevState => !prevState)
-                            handleSelectAllChange(ev)
-                        }}
-                    />
-                    Select all
-                </Label>
-            </ElementsForm>
+            <Form>
+                <CustomCheckbox
+                    isFormDisabled={isFormDisabled}
+                    label='Colors'
+                    checked={colorsChecked}
+                    onChange={(ev) => {
+                        setColorsChecked(ev.target.checked)
+                    }}
+                />
+                <CustomCheckbox
+                    isFormDisabled={isFormDisabled}
+                    label='Fonts'
+                    checked={fontsChecked}
+                    onChange={(ev) => {
+                        setFontsChecked(ev.target.checked)
+                    }}
+                />
+            </Form>
         </FormContainer>
     )
 }
@@ -70,14 +49,14 @@ const MainForm: FunctionComponent<Props> = ({ isDisabled }) => {
 const FormContainer = styled.div<{ color: string }>`
     display: flex;
     flex-direction: column;
-    padding: 0 80px;
     ${({ color }) => color && `color: ${color}`};
 `
 
-const ElementsForm = styled.form`
+const Form = styled.form`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
 `
 
 const Label = styled.label``

@@ -10,7 +10,7 @@ import Loader from './Loader'
 
 function App() {
     const [isElementsSelected, setIsElementsSelected] = useState(null)
-    const [isFormValid, setisFormValid] = useState(false)
+    const [isFormValid, setIsFormValid] = useState(false)
 
     const onCreate = () => {
         parent.postMessage({ pluginMessage: { type: MsgTypes.GENERATE_DESIGN_SYSTEM } }, '*')
@@ -48,7 +48,7 @@ function App() {
                                 <Heading3>Select elements to get started</Heading3>
                             </ImgContainer>
                         }
-                        <MainForm isDisabled={!isElementsSelected} />
+                        <MainForm isFormDisabled={!isElementsSelected} setIsFormValid={setIsFormValid} />
                         <Button
                             onClick={onCreate}
                             disabled={!isFormValid}
