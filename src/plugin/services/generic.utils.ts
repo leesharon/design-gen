@@ -25,8 +25,16 @@ function createNewPageFromFrame(frame: FrameNode): void {
     figma.root.appendChild(newPage)
 }
 
+function compare2ofType<T>(a: T, b: T, isReverse = false): number {
+    const reverse = isReverse ? -1 : 1
+    if (a > b) return 1 * reverse
+    if (a < b) return -1 * reverse
+    return 0
+}
+
 export const genericsUtils = {
     rgbToHex,
     decimalRgbToHex,
     createNewPageFromFrame,
+    compare2ofType,
 }
