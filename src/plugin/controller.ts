@@ -6,28 +6,37 @@ import { fontsUtils } from './services/fonts.service'
 
 figma.showUI(__html__)
 
+const { selection } = figma.currentPage
+setTimeout(() => {
+    msgsUtils.postMsg(
+        MsgTypes.IS_ELEMENTS_SELECTED,
+        selection.length ? Strings.ELEMENTS_SELECTED : Strings.NO_ELEMENTS_FOUND,
+        !!selection.length
+    )
+}, 100)
+
 figma.ui.resize(380, 540)
 
 figma.skipInvisibleInstanceChildren = true
 
 figma.ui.onmessage = (msg) => {
     switch (msg.type) {
-    case MsgTypes.GENERATE_DESIGN_SYSTEM:
-        generateDesignSystem()
-        return
-    case MsgTypes.CLOSE_PLUGIN:
-        figma.closePlugin()
-        return
-    default:
-        console.log('Unknown message type:', msg.type)
-        return
+        case MsgTypes.GENERATE_DESIGN_SYSTEM:
+            generateDesignSystem()
+            return
+        case MsgTypes.CLOSE_PLUGIN:
+            figma.closePlugin()
+            return
+        default:
+            console.log('Unknown message type:', msg.type)
+            return
     }
 }
 
 async function generateDesignSystem() {
     console.log('Generating Design System...')
 
-    const { selection } = figma.currentPage
+
     if (!selection.length)
         return msgsUtils.postMsg(MsgTypes.NO_SELECTION, Strings.NO_SELECTION)
 

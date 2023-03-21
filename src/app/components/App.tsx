@@ -8,6 +8,7 @@ import MainForm from './MainForm'
 import { Colors } from '../../constants'
 
 function App() {
+    const [isElementsSelected, setIsElementsSelected] = useState(false)
     const [isValid, setIsValid] = useState(false)
 
     const onCreate = () => {
@@ -15,15 +16,21 @@ function App() {
     }
 
     useEffect(() => {
-        window.onmessage = (event) => {
-            const { type, msg } = event.data.pluginMessage
-            if (type === MsgTypes.GENERATE_DESIGN_SYSTEM)
-                console.log(`Figma Says: ${msg}`)
-        }
-        window.onmessage = (event) => {
-            const { type, msg } = event.data.pluginMessage
-            if (type === MsgTypes.NO_SELECTION)
-                console.log(`Figma Says: ${msg}`)
+        window.onmessage = (ev) => {
+            const { type, msg, data } = ev.data.pluginMessage
+
+            switch (type) {
+                case MsgTypes.IS_ELEMENTS_SELECTED:
+                    console.log(`Figma Says: ${msg}`)
+                    setIsElementsSelected(data)
+                    break;
+                case MsgTypes.GENERATE_DESIGN_SYSTEM:
+                    console.log(`Figma Says: ${msg}`)
+                case MsgTypes.NO_SELECTION:
+                    console.log(`Figma Says: ${msg}`)
+                default:
+                    break;
+            }
         }
     }, [])
 
