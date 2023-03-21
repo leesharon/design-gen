@@ -1,21 +1,21 @@
 import { genericsUtils } from './utils.service'
 
-const generateFontPaletteFrame = async (fontsSet: Set<string>) => {
-    if (!fontsSet.size) return
+const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
+    if (!fontsStrSet.size) return
     // Create a new frame
     const fontDisplayFrame = figma.createFrame()
     fontDisplayFrame.name = 'Fonts'
     const frameWidth = 2000
     const lineHeight = 100
-    const frameHeight = fontsSet.size * lineHeight
+    const frameHeight = fontsStrSet.size * lineHeight
+
+    const fontObjectsArraySorted = sortFontsArray(transformFontsStrSetToObjectArray(fontsStrSet))
 
     // Resize the frame to fit all the text nodes
     fontDisplayFrame.resize(frameWidth, frameHeight)
 
     let yOffset = 0
-    for (const appTextNodeStr of fontsSet) {
-        const appTextNode: AppTextNode = JSON.parse(appTextNodeStr)
-
+    for (const appTextNode of fontObjectsArraySorted) {
         // Create a new text node
         const newTextNode = figma.createText()
 
@@ -27,7 +27,7 @@ const generateFontPaletteFrame = async (fontsSet: Set<string>) => {
         newTextNode.fontSize = appTextNode.fontSize
 
         // Set the text content to indicate the font family
-        newTextNode.characters = genericsUtils.getAppTextNodeTitle(appTextNode)
+        newTextNode.characters = getAppTextNodeTitle(appTextNode)
 
         // Set the text color and alignment
         newTextNode.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }]
@@ -51,6 +51,30 @@ async function doesFontExist(fontNameObj: FontName): Promise<boolean> {
         doesFontExist = false
     })
     return doesFontExist
+}
+
+function getAppTextNodeTitle(appFontNode: AppTextNode): string {
+    return `${appFontNode.fontFamily} / ${appFontNode.fontStyle} / ${appFontNode.fontSize}`
+}
+
+function sortFontsArray(fontsArr: AppTextNode[]) {
+    const fontsArrSorted = fontsArr.sort((firstFontObj, secondFontObj) => {
+        const fontSizeCompare = genericsUtils.compare2ofType(firstFontObj.fontSize, secondFontObj.fontSize, true)
+        if (fontSizeCompare !== 0) return fontSizeCompare
+        const fontFamilyCompare = genericsUtils.compare2ofType(firstFontObj.fontFamily, secondFontObj.fontFamily, true)
+        if (fontFamilyCompare !== 0) return fontFamilyCompare
+        return genericsUtils.compare2ofType(firstFontObj.fontStyle, secondFontObj.fontStyle, false)
+    })
+    return fontsArrSorted
+}
+
+function transformFontsStrSetToObjectArray(fontsStrArr: Set<string>) {
+    const fontsObjectArr: AppTextNode[] = []
+    for (const fontStr of fontsStrArr) {
+        const fontObj: AppTextNode = JSON.parse(fontStr)
+        fontsObjectArr.push(fontObj)
+    }
+    return fontsObjectArr
 }
 
 export const fontsUtils = {
