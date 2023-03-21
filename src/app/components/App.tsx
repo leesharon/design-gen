@@ -36,11 +36,14 @@ function App() {
 
     return (
         <ScreenContainer gap={50} justify={'space-between'} align='center'>
-            <ImgContainer align='center'>
-                <Img src={logo} alt={'logo'} />
-                <Heading3>Select elements to get started</Heading3>
-            </ImgContainer>
-            <MainForm />
+            {isElementsSelected
+                ? <Heading3 fontSize='14px'>Selected elemnts</Heading3>
+                : <ImgContainer align='center'>
+                    <Img src={logo} alt={'logo'} />
+                    <Heading3>Select elements to get started</Heading3>
+                </ImgContainer>
+            }
+            <MainForm isDisabled={!isElementsSelected} />
             <Button
                 onClick={onCreate}
                 disabled={!isValid}

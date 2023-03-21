@@ -1,11 +1,13 @@
 import React, { FunctionComponent, useState } from 'react'
 import styled from 'styled-components'
+import { Colors } from '../../constants'
 import { FlexColumn, Heading5 } from './Generics'
 
 interface Props {
+    isDisabled: boolean
 }
 
-const MainForm: FunctionComponent<Props> = () => {
+const MainForm: FunctionComponent<Props> = ({ isDisabled }) => {
 
     const [colorsChecked, setColorsChecked] = useState(false)
     const [fontsChecked, setFontsChecked] = useState(false)
@@ -24,7 +26,7 @@ const MainForm: FunctionComponent<Props> = () => {
 
 
     return (
-        <FormContainer>
+        <FormContainer color={isDisabled ? Colors.GRAY_500 : Colors.BLACK}>
             <Heading5 fontSize={'14px'}>Select elements to generate</Heading5>
             <ElementsForm>
                 <Label>
@@ -65,8 +67,11 @@ const MainForm: FunctionComponent<Props> = () => {
     )
 }
 
-const FormContainer = styled(FlexColumn)`
+const FormContainer = styled.div<{ color: string }>`
+    display: flex;
+    flex-direction: column;
     padding: 0 80px;
+    ${({ color }) => color && `color: ${color}`};
 `
 
 const ElementsForm = styled.form`
