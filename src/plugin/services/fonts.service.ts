@@ -34,8 +34,6 @@ const generateFontPaletteFrame = async (fontsSet: Set<string>) => {
         newTextNode.y = yOffset
         yOffset += 50
 
-        console.log('textNode:', newTextNode)
-
         fontDisplayFrame.appendChild(newTextNode)
     }
     genericsUtils.createNewPageFromFrame(fontDisplayFrame)
@@ -44,7 +42,6 @@ const generateFontPaletteFrame = async (fontsSet: Set<string>) => {
 async function doesFontExist(fontNameObj: FontName): Promise<boolean> {
     let doesFontExist = false
     await figma.loadFontAsync(fontNameObj).then(() => {
-        console.log('Font loaded:', fontNameObj)
         doesFontExist = true
     }).catch(() => {
         console.log('Font not found:', fontNameObj)
