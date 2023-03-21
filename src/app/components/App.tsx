@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import '../styles/global.css'
 import { MsgTypes } from '../../enums/MsgTypes.enum'
 import logo from '../assets/logo.svg'
-import '../styles/global.css'
 import { FlexColumn, Heading3, ScreenContainer } from './Generics'
 import MainForm from './MainForm'
 import { Colors } from '../../constants'
+import Loader from './Loader'
 
 function App() {
-    const [isElementsSelected, setIsElementsSelected] = useState(false)
-    const [isValid, setIsValid] = useState(false)
+    const [isElementsSelected, setIsElementsSelected] = useState(null)
+    const [isFormValid, setisFormValid] = useState(false)
 
     const onCreate = () => {
         parent.postMessage({ pluginMessage: { type: MsgTypes.GENERATE_DESIGN_SYSTEM } }, '*')
@@ -36,21 +37,27 @@ function App() {
 
     return (
         <ScreenContainer gap={50} justify={'space-between'} align='center'>
-            {isElementsSelected
-                ? <Heading3 fontSize='14px'>Selected elemnts</Heading3>
-                : <ImgContainer align='center'>
-                    <Img src={logo} alt={'logo'} />
-                    <Heading3>Select elements to get started</Heading3>
-                </ImgContainer>
+            {
+                (isElementsSelected === null)
+                    ? <Loader />
+                    : <>
+                        {isElementsSelected
+                            ? <Heading3 fontSize='14px'>Selected elements</Heading3>
+                            : <ImgContainer align='center'>
+                                <Img src={logo} alt={'logo'} />
+                                <Heading3>Select elements to get started</Heading3>
+                            </ImgContainer>
+                        }
+                        <MainForm isDisabled={!isElementsSelected} />
+                        <Button
+                            onClick={onCreate}
+                            disabled={!isFormValid}
+                            backgroundColor={isFormValid ? Colors.PURPLE_PRIMARY : Colors.GRAY_500}
+                        >
+                            Generate a Design System
+                        </Button>
+                    </>
             }
-            <MainForm isDisabled={!isElementsSelected} />
-            <Button
-                onClick={onCreate}
-                disabled={!isValid}
-                backgroundColor={isValid ? Colors.PURPLE_PRIMARY : Colors.GRAY_500}
-            >
-                Generate a Design System
-            </Button>
         </ScreenContainer>
     )
 }

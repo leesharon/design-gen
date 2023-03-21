@@ -13,7 +13,7 @@ setTimeout(() => {
         selection.length ? Strings.ELEMENTS_SELECTED : Strings.NO_ELEMENTS_FOUND,
         !!selection.length
     )
-}, 100)
+}, 1000)
 
 figma.ui.resize(380, 540)
 
