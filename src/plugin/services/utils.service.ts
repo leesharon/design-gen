@@ -25,8 +25,13 @@ function createNewPageFromFrame(frame: FrameNode): void {
     figma.root.appendChild(newPage)
 }
 
+function getAppTextNodeTitle(appFontNode: AppTextNode): string {
+    return `${appFontNode.fontFamily} / ${appFontNode.fontStyle} / ${appFontNode.fontSize}`
+}
+
 export const genericsUtils = {
     rgbToHex,
     decimalRgbToHex,
     createNewPageFromFrame,
+    getAppTextNodeTitle,
 }

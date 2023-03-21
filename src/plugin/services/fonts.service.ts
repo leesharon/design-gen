@@ -1,45 +1,44 @@
 import { genericsUtils } from './utils.service'
 
-const generateFontPaletteFrame = async (fontsArr: FontName[]) => {
-    if (!fontsArr.length) return
+const generateFontPaletteFrame = async (fontsSet: Set<string>) => {
+    if (!fontsSet.size) return
     // Create a new frame
     const fontDisplayFrame = figma.createFrame()
     fontDisplayFrame.name = 'Fonts'
+
     // Resize the frame to fit all the text nodes
-    fontDisplayFrame.resize(150, fontsArr.length * 50)
+    fontDisplayFrame.resize(150, fontsSet.size * 50)
 
     let yOffset = 0
-    for (const fontNameObj of fontsArr) {
+    for (const appTextNodeStr of fontsSet) {
+        const appTextNode: AppTextNode = JSON.parse(appTextNodeStr)
+
         // Create a new text node
-        const textNode = figma.createText()
+        const newTextNode = figma.createText()
 
         // Load the font if it exists, otherwise skip it
-        if (!await doesFontExist(fontNameObj)) continue
+        if (!await doesFontExist(appTextNode.fontName)) continue
 
         // Set the font family, style and size
-        textNode.fontName = fontNameObj
-        textNode.fontSize = 16
+        newTextNode.fontName = appTextNode.fontName
+        newTextNode.fontSize = appTextNode.fontSize
 
         // Set the text content to indicate the font family
-        textNode.characters = `${fontNameObj.family}, ${fontNameObj.style}`
+        newTextNode.characters = genericsUtils.getAppTextNodeTitle(appTextNode)
 
         // Set the text color and alignment
-        textNode.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }]
-        textNode.textAlignHorizontal = 'CENTER'
-        textNode.textAlignVertical = 'CENTER'
-        textNode.resize(150, 50)
-        textNode.y = yOffset
+        newTextNode.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }]
+        newTextNode.textAlignHorizontal = 'LEFT'
+        newTextNode.textAlignVertical = 'CENTER'
+        newTextNode.resize(150, 50)
+        newTextNode.y = yOffset
         yOffset += 50
 
-        console.log('textNode:', textNode)
+        console.log('textNode:', newTextNode)
 
-        fontDisplayFrame.appendChild(textNode)
+        fontDisplayFrame.appendChild(newTextNode)
     }
     genericsUtils.createNewPageFromFrame(fontDisplayFrame)
-}
-
-export const fontsUtils = {
-    generateFontPaletteFrame,
 }
 
 async function doesFontExist(fontNameObj: FontName): Promise<boolean> {
@@ -54,3 +53,6 @@ async function doesFontExist(fontNameObj: FontName): Promise<boolean> {
     return doesFontExist
 }
 
+export const fontsUtils = {
+    generateFontPaletteFrame,
+}
