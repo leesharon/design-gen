@@ -1,19 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { MsgTypes } from '../../enums/MsgTypes.enum'
 import logo from '../assets/logo.svg'
-import '../styles/ui.css'
 import '../styles/global.css'
-import { Heading3, Heading5, ScreenContainer } from './Generics'
+import { FlexColumn, Heading3, ScreenContainer } from './Generics'
+import MainForm from './MainForm'
+import { Colors } from '../../constants'
 
 function App() {
+    const [isValid, setIsValid] = useState(false)
 
     const onCreate = () => {
         parent.postMessage({ pluginMessage: { type: MsgTypes.GENERATE_DESIGN_SYSTEM } }, '*')
-    }
-
-    const onClose = () => {
-        parent.postMessage({ pluginMessage: { type: MsgTypes.CLOSE_PLUGIN } }, '*')
     }
 
     useEffect(() => {
@@ -30,20 +28,24 @@ function App() {
     }, [])
 
     return (
-        <ScreenContainer gap={50} justify={'space-around'}>
-            <ImgContainer>
+        <ScreenContainer gap={50} justify={'space-between'} align='center'>
+            <ImgContainer align='center'>
                 <Img src={logo} alt={'logo'} />
-                <Heading3>Select screens to get started</Heading3>
+                <Heading3>Select elements to get started</Heading3>
             </ImgContainer>
-            <Heading5>Select elements to generate</Heading5>
-            <Button id="create" onClick={onCreate}>
-                Create
+            <MainForm />
+            <Button
+                onClick={onCreate}
+                disabled={!isValid}
+                backgroundColor={isValid ? Colors.PURPLE_PRIMARY : Colors.GRAY_500}
+            >
+                Generate a Design System
             </Button>
         </ScreenContainer>
     )
 }
 
-const ImgContainer = styled.div`
+const ImgContainer = styled(FlexColumn)`
 
 `
 
@@ -53,6 +55,13 @@ const Img = styled.img`
     margin-bottom: 16px;
 `
 
-const Button = styled.button``
+const Button = styled.button<{
+    backgroundColor: string
+}>`
+    width: 100%;
+    height: 40px;
+    color: ${Colors.WHITE};
+    ${({ backgroundColor }) => backgroundColor && `background: ${backgroundColor}`};
+`
 
 export default App

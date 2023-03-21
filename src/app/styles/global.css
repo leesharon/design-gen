@@ -30,7 +30,10 @@ body {
 /* Reapply the pointer cursor for anchor tags */
 a,
 button {
-    cursor: revert;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Remove list styles (bullets/numbers) */
