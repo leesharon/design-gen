@@ -59,8 +59,4 @@ const Form = styled.form`
     width: 100%;
 `
 
-const Label = styled.label``
-
-const Checkbox = styled.input``
-
 export default MainForm
