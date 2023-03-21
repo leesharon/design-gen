@@ -1,4 +1,4 @@
-import { genericsUtils } from './utils.service'
+import { genericsUtils } from './generic.utils'
 
 const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     if (!fontsStrSet.size) return

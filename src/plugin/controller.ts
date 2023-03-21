@@ -1,10 +1,21 @@
 import { Strings } from '../constants'
 import { MsgTypes } from '../enums/MsgTypes.enum'
 import { colorsUtils } from './services/colors.service'
-import { msgsUtils } from './services/msgs.service'
+import { msgsUtils } from './services/msgs.utils'
 import { fontsUtils } from './services/fonts.service'
 
 figma.showUI(__html__)
+
+const { selection } = figma.currentPage
+setTimeout(() => {
+    msgsUtils.postMsg(
+        MsgTypes.IS_ELEMENTS_SELECTED,
+        selection.length ? Strings.ELEMENTS_SELECTED : Strings.NO_ELEMENTS_FOUND,
+        !!selection.length
+    )
+}, 1000)
+
+figma.ui.resize(380, 540)
 
 figma.skipInvisibleInstanceChildren = true
 
@@ -25,7 +36,7 @@ figma.ui.onmessage = (msg) => {
 async function generateDesignSystem() {
     console.log('Generating Design System...')
 
-    const { selection } = figma.currentPage
+
     if (!selection.length)
         return msgsUtils.postMsg(MsgTypes.NO_SELECTION, Strings.NO_SELECTION)
 

@@ -1,9 +1,17 @@
 import styled from 'styled-components'
 
-const MainLayout = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  padding: 0 30px;
+const ScreenContainer = styled.div<{
+    gap?: number;
+    justify?: string;
+    align?: string;
+}>`
+  display: flex;
+  flex-direction: column;
+  padding: 28px 20px 20px;
+  height: 100%;
+  ${({ gap }) => gap && `gap: ${gap}px`};
+  ${({ justify }) => justify && `justify-content: ${justify}`};
+  ${({ align }) => align && `align-items: ${align}`};
 `
 
 const FlexRow = styled.div<{
@@ -62,7 +70,7 @@ export {
     PrimaryButton,
     FlexRow,
     FlexColumn,
-    MainLayout,
+    ScreenContainer,
     Heading1,
     Heading3,
     Heading5,

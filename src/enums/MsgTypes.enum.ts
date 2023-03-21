@@ -3,4 +3,5 @@ export enum MsgTypes {
     NO_SELECTION = 'no-selection',
     CLOSE_PLUGIN = 'close-plugin',
     NO_ELEMENTS_FOUND = 'no-elements-found',
+    IS_ELEMENTS_SELECTED = 'is-elements-selected',
 }
