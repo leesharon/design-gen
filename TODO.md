@@ -6,10 +6,10 @@ Todo's
 - improve the color duplications removal algorithm
 - Fonts
   - Refactor font loading to load in parallel
-  - Modularize the font services functions
-  - Show the fonts on screen after sorting them
-
 
 Bugs
+
 - double colors bug
 - selection is image bug
+- After each generation, an accidental empty Text node is created in the original page
+- Generating pages before selecting, breaks the code and the plugin gets stuck
