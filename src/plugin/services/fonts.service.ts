@@ -83,6 +83,8 @@ function setNodeProperties(newTextNode: TextNode, frameWidth: number, lineHeight
     newTextNode.textAlignHorizontal = 'LEFT'
     newTextNode.textAlignVertical = 'CENTER'
     newTextNode.resize(frameWidth, lineHeight)
+    newTextNode.y = y
+    newTextNode.x = x
 }
 
 async function doesFontExist(fontNameObj: FontName): Promise<boolean> {
