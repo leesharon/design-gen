@@ -13,7 +13,7 @@ setTimeout(() => {
         selection.length ? Strings.ELEMENTS_SELECTED : Strings.NO_ELEMENTS_FOUND,
         !!selection.length
     )
-}, 1000)
+}, 500)
 
 figma.ui.resize(240, 300)
 
@@ -22,7 +22,8 @@ figma.skipInvisibleInstanceChildren = true
 figma.ui.onmessage = (msg) => {
     switch (msg.type) {
         case MsgTypes.GENERATE_DESIGN_SYSTEM:
-            generateDesignSystem()
+            const { withColors, withFonts } = msg.data
+            generateDesignSystem(withColors, withFonts)
             return
         case MsgTypes.CLOSE_PLUGIN:
             figma.closePlugin()
@@ -33,9 +34,8 @@ figma.ui.onmessage = (msg) => {
     }
 }
 
-async function generateDesignSystem() {
+async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
     console.log('Generating Design System...')
-
 
     if (!selection.length)
         return msgsUtils.postMsg(MsgTypes.NO_SELECTION, Strings.NO_SELECTION)
@@ -51,7 +51,7 @@ async function generateDesignSystem() {
             if (node.name.toLocaleLowerCase().includes('icon')) continue
 
             // Gets All Colors for the Palette
-            colorsUtils.getAllUniqueColors(node, uniqueColors)
+            withColors && colorsUtils.getAllUniqueColors(node, uniqueColors)
 
             // Handles nested children nodes
             const { type } = node
@@ -63,7 +63,7 @@ async function generateDesignSystem() {
 
             ) iterateThroughAllNodes(node.children as SceneNode[])
 
-            else if (type === 'TEXT' && node.fontName) {
+            else if (withFonts && type === 'TEXT' && node.fontName) {
                 // If the fontName is not mixed, add it to the array
                 if (node.fontName !== figma.mixed && node.fontSize !== figma.mixed) {
                     const appTextNode: AppTextNode = {
@@ -84,17 +84,20 @@ async function generateDesignSystem() {
 
     iterateThroughAllNodes(selection)
 
-    colorsUtils.generateColorPaletteFrame(uniqueColors)
-    await fontsUtils.generateFontPaletteFrame(uniqueFonts)
+    setTimeout(async () => {
+        // Generate the according figma elements and display them
+        withColors && colorsUtils.generateColorPaletteFrame(uniqueColors)
+        withFonts && await fontsUtils.generateFontPaletteFrame(uniqueFonts)
 
-    if (uniqueColors.size || uniqueFonts.size) {
-        console.log(Strings.DESIGN_SYSTEM_GENERATED)
-        msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.DESIGN_SYSTEM_GENERATED)
+        if (uniqueColors.size || uniqueFonts.size) {
+            console.log(Strings.DESIGN_SYSTEM_GENERATED)
+            msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.DESIGN_SYSTEM_GENERATED)
 
-        figma.closePlugin()
-    } else {
-        console.log(Strings.NO_ELEMENTS_FOUND)
-        msgsUtils.postMsg(MsgTypes.NO_ELEMENTS_FOUND, Strings.NO_ELEMENTS_FOUND)
-    }
+            figma.closePlugin()
+        } else {
+            console.log(Strings.NO_ELEMENTS_FOUND)
+            msgsUtils.postMsg(MsgTypes.NO_ELEMENTS_FOUND, Strings.NO_ELEMENTS_FOUND)
+        }
+    }, 3000);
 }
 

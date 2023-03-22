@@ -11,3 +11,4 @@ Todo's
 
 Bugs
 - double colors bug
+- selected elements doesn't auto update

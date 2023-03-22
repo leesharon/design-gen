@@ -9,11 +9,6 @@ import Loader from './Loader'
 
 function App() {
     const [isElementsSelected, setIsElementsSelected] = useState(null)
-    const [isFormValid, setIsFormValid] = useState(false)
-
-    const onCreate = () => {
-        parent.postMessage({ pluginMessage: { type: MsgTypes.GENERATE_DESIGN_SYSTEM } }, '*')
-    }
 
     useEffect(() => {
         window.onmessage = (ev) => {
@@ -35,29 +30,18 @@ function App() {
     }, [])
 
     return (
-        <>
-            <ScreenContainer gap={50} justify={'space-between'} align='center'>
-                {
-                    (isElementsSelected === null)
-                        ? <Loader />
-                        : <>
-                            {isElementsSelected
-                                ? <>
-                                    <MainForm isFormDisabled={!isElementsSelected} setIsFormValid={setIsFormValid} />
-                                    <Button
-                                        onClick={onCreate}
-                                        disabled={!isFormValid}
-                                        backgroundColor={isFormValid ? Colors.BLUE_PRIMARY : Colors.GRAY_500}
-                                    >
-                                        Generate
-                                    </Button>
-                                </>
-                                : <SelectElementsText>Please select some elements to get started.</SelectElementsText>
-                            }
-                        </>
-                }
-            </ScreenContainer>
-        </>
+        <ScreenContainer gap={50} justify={'space-between'} align='center'>
+            {
+                (isElementsSelected === null)
+                    ? <Loader />
+                    : <>
+                        {isElementsSelected
+                            ? <MainForm isFormDisabled={!isElementsSelected} setIsElementsSelected={setIsElementsSelected} />
+                            : <SelectElementsText>Please select some elements to get started.</SelectElementsText>
+                        }
+                    </>
+            }
+        </ScreenContainer>
     )
 }
 
@@ -66,18 +50,6 @@ const SelectElementsText = styled(Heading3)`
     color: ${Colors.GRAY_500};
     text-align: center;
     line-height: 1.3;
-`
-
-const Button = styled.button<{
-    backgroundColor: string
-}>`
-    width: 100%;
-    height: 32px;
-    font-size: 14px;
-    transition: all 0.2s ease-in-out;
-    border-radius: 6px;
-    color: ${Colors.WHITE};
-    ${({ backgroundColor }) => backgroundColor && `background: ${backgroundColor}`};
 `
 
 export default App
