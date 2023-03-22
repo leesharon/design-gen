@@ -35,7 +35,7 @@ const Label = styled.label<{ color: string }>`
   padding-left: 35px;
   margin-bottom: 10px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   user-select: none;
   ${({ color }) => color && `color: ${color}`};
 
