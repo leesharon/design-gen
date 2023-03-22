@@ -2,7 +2,7 @@ import { colorSortingService } from './color-sorting.service';
 /* eslint-disable indent */
 import { genericsUtils } from './generic.utils'
 
-const generateColorPaletteFrame = (colors: Set<string>) => {
+const generateColorPaletteFrame = (colors: Set<string>): PageNode => {
     if (!colors.size) return
     const colorDisplayFrame = figma.createFrame()
     colorDisplayFrame.name = 'Colors'
@@ -26,7 +26,7 @@ const generateColorPaletteFrame = (colors: Set<string>) => {
         rectangle.fills = [{ type: 'SOLID', color }]
         colorDisplayFrame.appendChild(rectangle)
     })
-    genericsUtils.createNewPageFromFrame(colorDisplayFrame)
+    return genericsUtils.createNewPageFromFrame(colorDisplayFrame)
 }
 
 const getAllUniqueColors = (node: SceneNode, uniqueColors: Set<string>) => {

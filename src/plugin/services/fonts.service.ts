@@ -1,7 +1,7 @@
 import { APP_PRIMARY_FONT_NAME, APP_REGULAR_FONT_NAME, APP_SECONDARY_FONT_NAME, DESCRIPTION_TEXT_GAP } from '../../constants/strings';
 import { genericsUtils } from './generic.utils'
 
-const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
+const generateFontPaletteFrame = async (fontsStrSet: Set<string>): Promise<PageNode> => {
     if (!fontsStrSet.size) return
     const fontObjectsArraySorted = sortFontsArray(transformFontsStrSetToObjectArray(fontsStrSet))
     // Create a new frame
@@ -9,7 +9,7 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     fontDisplayFrame.name = 'Fonts'
     const lineHeight = 100
     const frameWidth = 2000
-    const frameHeight = fontsStrSet.size * lineHeight
+    const frameHeight = fontsStrSet.size * lineHeight + 400
     // Resize the frame to fit all the text nodes
     fontDisplayFrame.resize(frameWidth, frameHeight)
     let yOffset = 100
@@ -63,7 +63,7 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
 
         fontDisplayFrame.appendChild(newTextNode)
     }
-    genericsUtils.createNewPageFromFrame(fontDisplayFrame)
+    return genericsUtils.createNewPageFromFrame(fontDisplayFrame)
 }
 
 function createSeparatorLineNode(frameWidth: number, xOffset: number, yOffset: number) {

@@ -95,14 +95,17 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
     iterateThroughAllNodes(selection)
 
     setTimeout(async () => {
+        let newCreatedPage: PageNode
+
         // Generate the according figma elements and display them
-        withColors && colorsUtils.generateColorPaletteFrame(uniqueColors)
-        withFonts && await fontsUtils.generateFontPaletteFrame(uniqueFonts)
+        withColors && (newCreatedPage = colorsUtils.generateColorPaletteFrame(uniqueColors))
+        withFonts && (newCreatedPage = await fontsUtils.generateFontPaletteFrame(uniqueFonts))
 
         if (uniqueColors.size || uniqueFonts.size) {
             console.log(Strings.DESIGN_SYSTEM_GENERATED)
             msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.DESIGN_SYSTEM_GENERATED)
 
+            figma.currentPage = newCreatedPage
             figma.closePlugin()
         } else {
             console.log(Strings.NO_ELEMENTS_FOUND)
