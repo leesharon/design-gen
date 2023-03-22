@@ -111,6 +111,6 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
             console.log(Strings.NO_ELEMENTS_FOUND)
             msgsUtils.postMsg(MsgTypes.NO_ELEMENTS_FOUND, Strings.NO_ELEMENTS_FOUND)
         }
-    }, 2000);
+    }, 1000);
 }
 

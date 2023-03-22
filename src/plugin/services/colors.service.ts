@@ -8,7 +8,8 @@ const generateColorPaletteFrame = (colors: Set<string>): PageNode => {
     colorDisplayFrame.name = 'Colors'
     colorDisplayFrame.resize(400, colors.size * 50)
 
-    const sortedColors = colorSortingService.sortColorsByHueAndLuminance([...colors])
+    let sortedColors = colorSortingService.sortColorsByHueAndLuminance([...colors])
+    sortedColors = colorSortingService.filterDuplicateColors(sortedColors)
 
     let yOffset = 0
     sortedColors.forEach((colorString) => {
