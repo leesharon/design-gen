@@ -1,14 +1,14 @@
 import { colorSortingService } from './color-sorting.service';
-/* eslint-disable indent */
 import { genericsUtils } from './generic.utils'
 
-const generateColorPaletteFrame = (colors: Set<string>) => {
+const generateColorPaletteFrame = (colors: Set<string>): PageNode => {
     if (!colors.size) return
     const colorDisplayFrame = figma.createFrame()
     colorDisplayFrame.name = 'Colors'
     colorDisplayFrame.resize(400, colors.size * 50)
 
-    const sortedColors = colorSortingService.sortColorsByHueAndLuminance([...colors])
+    let sortedColors = colorSortingService.sortColorsByHueAndLuminance([...colors])
+    sortedColors = colorSortingService.filterDuplicateColors(sortedColors)
 
     let yOffset = 0
     sortedColors.forEach((colorString) => {
@@ -26,7 +26,7 @@ const generateColorPaletteFrame = (colors: Set<string>) => {
         rectangle.fills = [{ type: 'SOLID', color }]
         colorDisplayFrame.appendChild(rectangle)
     })
-    genericsUtils.createNewPageFromFrame(colorDisplayFrame)
+    return genericsUtils.createNewPageFromFrame(colorDisplayFrame)
 }
 
 const getAllUniqueColors = (node: SceneNode, uniqueColors: Set<string>) => {
