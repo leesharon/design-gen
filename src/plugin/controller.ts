@@ -3,7 +3,6 @@ import { MsgTypes } from '../enums/MsgTypes.enum'
 import { colorsUtils } from './services/colors.service'
 import { msgsUtils } from './services/msgs.utils'
 import { fontsUtils } from './services/fonts.service'
-import { APP_PRIMARY_FONT_NAME } from '../constants/strings'
 
 figma.showUI(__html__)
 
@@ -104,7 +103,7 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
         let newCreatedPage: PageNode
 
         // Generate the according figma elements and display them
-        withColors && (newCreatedPage = colorsUtils.generateColorPaletteFrame(uniqueColors))
+        withColors && (newCreatedPage = await colorsUtils.generateColorPaletteFrame(uniqueColors))
         withFonts && (newCreatedPage = await fontsUtils.generateFontPaletteFrame(
             uniqueFonts,
             [...fontSizes].sort((a, b) => a - b),
