@@ -19,7 +19,7 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
     const minFrameWidth = 720
     const lineHeight = rectangleHeight + gap
     const columnWidth = rectangleWidth + gap
-    const frameWidth = Math.max(columnWidth * (colors.size / itemsPerRow) + initialXOffset * 2, minFrameWidth)
+    const frameWidth = Math.max(columnWidth * (Math.floor(colors.size / itemsPerRow) + 1) + initialXOffset * 2 - gap, minFrameWidth)
     const frameHeight = colors.size * lineHeight
 
     // Create a frame to hold the color palette
