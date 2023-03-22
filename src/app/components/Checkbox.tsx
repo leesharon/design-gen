@@ -5,24 +5,24 @@ import { Colors } from '../../constants'
 interface Props {
     label: string
     checked: boolean
-    isFormDisabled: boolean
+    disabled: boolean
     onChange: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-const CustomCheckbox: FunctionComponent<Props> = ({ label, checked, onChange, isFormDisabled }) => {
+const CustomCheckbox: FunctionComponent<Props> = ({ label, checked, onChange, disabled }) => {
     return (
         <Label
-            color={isFormDisabled ? Colors.GRAY_500 : Colors.BLACK}
+            color={disabled ? Colors.GRAY_500 : Colors.BLACK}
         >
             {label}
             <Input
                 type="checkbox"
                 checked={checked}
                 onChange={onChange}
-                disabled={isFormDisabled}
+                disabled={disabled}
             />
             <Checkmark
-                borderColor={isFormDisabled ? Colors.GRAY_500 : Colors.BLACK}
+                borderColor={disabled ? Colors.GRAY_500 : Colors.BLACK}
                 className="checkmark" />
         </Label>
     )
@@ -32,10 +32,11 @@ const Label = styled.label<{ color: string }>`
   display: flex;
   align-items: center;
   position: relative;
-  padding-left: 35px;
+  padding-left: 30px;
   margin-bottom: 10px;
+  padding-top: 2px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   user-select: none;
   ${({ color }) => color && `color: ${color}`};
 
@@ -45,15 +46,16 @@ const Label = styled.label<{ color: string }>`
     cursor: pointer;
     height: 0;
     width: 0;
+    border-radius: 4px;
   }
 
-  &:hover input ~ .checkmark {
-    background-color: #ccc;
+  &:hover input:enabled ~ .checkmark {
+    background-color: ${Colors.BLUE_PRIMARY};
   }
-
 `
 
-const Input = styled.input``
+const Input = styled.input`
+`
 
 const Checkmark = styled.span<{ borderColor: string }>`
   position: absolute;
@@ -61,8 +63,9 @@ const Checkmark = styled.span<{ borderColor: string }>`
   left: 0;
   height: 20px;
   width: 20px;
-  border: ${({ borderColor }) => borderColor} solid 2px;
+  border: ${Colors.BLUE_PRIMARY} solid 2px;
   border-radius: 4px;
+  transition: all 0.2s ease-in-out;
 
   &:after {
     content: "";
@@ -75,13 +78,22 @@ const Checkmark = styled.span<{ borderColor: string }>`
   }
 
   &:after {
-    left: 6px;
-    top: 3px;
-    width: 5px;
-    height: 10px;
-    border: solid black;
-    border-width: 0 3px 3px 0;
+    left: 5px;
+    top: 2px;
+    width: 6px;
+    height: 11px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
     transform: rotate(45deg);
+  }
+
+  input:checked ~ & {
+    background-color: #2196f3;
+  }
+
+  input:disabled ~ & {
+    background-color: ${Colors.GRAY_500};
+    border-color: ${Colors.GRAY_500};
   }
 `
 

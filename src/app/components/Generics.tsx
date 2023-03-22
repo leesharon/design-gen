@@ -7,7 +7,7 @@ const ScreenContainer = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  padding: 28px 20px 20px;
+  padding: 25px 15px;
   height: 100%;
   ${({ gap }) => gap && `gap: ${gap}px`};
   ${({ justify }) => justify && `justify-content: ${justify}`};
