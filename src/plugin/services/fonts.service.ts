@@ -1,4 +1,4 @@
-import { APP_PRIMARY_FONT_NAME, APP_SECONDARY_FONT_NAME, DESCRIPTION_TEXT_GAP } from '../../constants/strings';
+import { APP_PRIMARY_FONT_NAME, APP_REGULAR_FONT_NAME, APP_SECONDARY_FONT_NAME, DESCRIPTION_TEXT_GAP } from '../../constants/strings';
 import { genericsUtils } from './generic.utils'
 
 const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
@@ -30,6 +30,18 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     fontDisplayFrame.appendChild(pageDescriptionTextNode)
     yOffset += pageDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
 
+    const pageFontWeightDescriptionTextNode = await createTextNode({ content: 'Weights used : Light, Regular, Medium, Bold', fontSize: 20, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
+    fontDisplayFrame.appendChild(pageFontWeightDescriptionTextNode)
+    yOffset += pageFontWeightDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
+
+    const pageFontSizesDescriptionTextNode = await createTextNode({ content: 'Font sizes used : 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96', fontSize: 20, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
+    fontDisplayFrame.appendChild(pageFontSizesDescriptionTextNode)
+    yOffset += pageFontSizesDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
+
+    const separatorLineNode2 = createSeparatorLineNode(frameWidth, xOffset, yOffset);
+    fontDisplayFrame.appendChild(separatorLineNode2)
+    yOffset += separatorLineNode2.height * 2 + DESCRIPTION_TEXT_GAP
+
     // Create a new text node for each font
     for (const appTextNode of fontObjectsArraySorted) {
         // Create a new text node
@@ -57,12 +69,10 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
 function createSeparatorLineNode(frameWidth: number, xOffset: number, yOffset: number) {
     const separatorLineNode = figma.createLine();
     separatorLineNode.resize(frameWidth - (xOffset * 2), 0);
-    console.log('here');
     separatorLineNode.x = xOffset;
     separatorLineNode.y = yOffset + 10;
     separatorLineNode.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }];
     separatorLineNode.strokeWeight = 5;
-    console.log('here');
     return separatorLineNode;
 }
 
