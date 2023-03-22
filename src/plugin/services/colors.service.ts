@@ -7,7 +7,7 @@ import { createSeparatorLineNode, createTextNode, setNodeProperties } from './te
 const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode> => {
     if (!colors.size) return
     const blackRGB: RGB = { r: 0, g: 0, b: 0 }
-    const whiteRGB = { r: 1, g: 1, b: 1 }
+    const whiteRGB: RGB = { r: 1, g: 1, b: 1 }
 
     // Set the width and height of a color rectangle
     const rectangleWidth = 400;
@@ -15,17 +15,13 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
 
     const itemsPerRow = 10
     const gap = 20
-    // Set the frame size
     const minFrameWidth = 720
     const lineHeight = rectangleHeight + gap
     const columnWidth = rectangleWidth + gap
-    const frameWidth = Math.max(columnWidth * (Math.floor(colors.size / itemsPerRow) + 1) + initialXOffset * 2 - gap, minFrameWidth)
-    const frameHeight = colors.size * lineHeight
 
     // Create a frame to hold the color palette
     const colorDisplayFrame = figma.createFrame()
     colorDisplayFrame.name = 'Color Palette'
-    colorDisplayFrame.resize(frameWidth, frameHeight)
 
     let sortedColors = colorSortingService.sortColorsByHueAndLuminance([...colors])
     sortedColors = colorSortingService.filterDuplicateColors(sortedColors)
@@ -35,19 +31,33 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
     const yIncrement = lineHeight
     const xIncrement = columnWidth
 
+    // Calculate the frame width
+    const frameWidth = Math.max(columnWidth * (Math.floor(colors.size / itemsPerRow) + 1) + initialXOffset * 2 - gap, minFrameWidth)
     // Create a new title text node
     const pageTitleTextNode = await createTextNode({ content: colorDisplayFrame.name, fontSize: 50, font: APP_PRIMARY_FONT_NAME, x: xOffset, y: yOffset })
-    colorDisplayFrame.appendChild(pageTitleTextNode)
     yOffset += pageTitleTextNode.height + DESCRIPTION_TEXT_GAP
 
     // Create an underline node for the title
-    const separatorLineNode = createSeparatorLineNode(colorDisplayFrame.width, xOffset, yOffset);
-    colorDisplayFrame.appendChild(separatorLineNode)
+    const separatorLineNode = createSeparatorLineNode(frameWidth, xOffset, yOffset);
     yOffset += separatorLineNode.height + DESCRIPTION_TEXT_GAP
 
     const pageDescriptionTextNode = await createTextNode({ content: 'This page contains a list of all the colors used in this design.', fontSize: 20, font: APP_SECONDARY_FONT_NAME, x: xOffset, y: yOffset })
-    colorDisplayFrame.appendChild(pageDescriptionTextNode)
     yOffset += pageDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
+
+    // Calculate the frame height
+    let frameHeight = yOffset + initialYOffset;
+    if (colors.size < itemsPerRow) {
+        frameHeight += (rectangleHeight + gap) * colors.size
+    } else {
+        frameHeight += (rectangleHeight + gap) * itemsPerRow
+    }
+
+    // Resize the frame
+    colorDisplayFrame.resize(frameWidth, frameHeight)
+
+    colorDisplayFrame.appendChild(pageTitleTextNode)
+    colorDisplayFrame.appendChild(separatorLineNode)
+    colorDisplayFrame.appendChild(pageDescriptionTextNode)
 
     const heightOfHeader = yOffset
 
