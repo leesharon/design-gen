@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import '../styles/global.css'
 import { MsgTypes } from '../../enums/MsgTypes.enum'
-import logo from '../assets/logo.svg'
-import { FlexColumn, Heading3, ScreenContainer } from './Generics'
+import { Heading3, ScreenContainer } from './Generics'
 import MainForm from './MainForm'
 import { Colors } from '../../constants'
 import Loader from './Loader'
@@ -36,47 +35,47 @@ function App() {
     }, [])
 
     return (
-        <ScreenContainer gap={50} justify={'space-between'} align='center'>
-            {
-                (isElementsSelected === null)
-                    ? <Loader />
-                    : <>
-                        {isElementsSelected
-                            ? <Heading3 fontSize='14px'>Selected elements</Heading3>
-                            : <ImgContainer align='center'>
-                                <Img src={logo} alt={'logo'} />
-                                <Heading3>Select elements to get started</Heading3>
-                            </ImgContainer>
-                        }
-                        <MainForm isFormDisabled={!isElementsSelected} setIsFormValid={setIsFormValid} />
-                        <Button
-                            onClick={onCreate}
-                            disabled={!isFormValid}
-                            backgroundColor={isFormValid ? Colors.PURPLE_PRIMARY : Colors.GRAY_500}
-                        >
-                            Generate a Design System
-                        </Button>
-                    </>
-            }
-        </ScreenContainer>
+        <>
+            <ScreenContainer gap={50} justify={'space-between'} align='center'>
+                {
+                    (isElementsSelected === null)
+                        ? <Loader />
+                        : <>
+                            {isElementsSelected
+                                ? <>
+                                    <MainForm isFormDisabled={!isElementsSelected} setIsFormValid={setIsFormValid} />
+                                    <Button
+                                        onClick={onCreate}
+                                        disabled={!isFormValid}
+                                        backgroundColor={isFormValid ? Colors.BLUE_PRIMARY : Colors.GRAY_500}
+                                    >
+                                        Generate
+                                    </Button>
+                                </>
+                                : <SelectElementsText>Please select some elements to get started.</SelectElementsText>
+                            }
+                        </>
+                }
+            </ScreenContainer>
+        </>
     )
 }
 
-const ImgContainer = styled(FlexColumn)`
-
-`
-
-const Img = styled.img`
-    width: 116px;
-    height: 116px;
-    margin-bottom: 16px;
+const SelectElementsText = styled(Heading3)`
+    margin-top: 40%;
+    color: ${Colors.GRAY_500};
+    text-align: center;
+    line-height: 1.3;
 `
 
 const Button = styled.button<{
     backgroundColor: string
 }>`
     width: 100%;
-    height: 40px;
+    height: 32px;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border-radius: 6px;
     color: ${Colors.WHITE};
     ${({ backgroundColor }) => backgroundColor && `background: ${backgroundColor}`};
 `

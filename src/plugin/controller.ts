@@ -15,7 +15,7 @@ setTimeout(() => {
     )
 }, 1000)
 
-figma.ui.resize(380, 540)
+figma.ui.resize(240, 300)
 
 figma.skipInvisibleInstanceChildren = true
 

@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Colors } from '../../constants'
 import CustomCheckbox from './Checkbox'
-import { Heading5 } from './Generics'
+import { Heading3, Heading5 } from './Generics'
 
 interface Props {
     isFormDisabled: boolean
@@ -23,7 +23,7 @@ const MainForm: FunctionComponent<Props> = ({ isFormDisabled, setIsFormValid }) 
 
     return (
         <FormContainer color={isFormDisabled ? Colors.BLACK : Colors.BLACK}>
-            <Heading5 fontSize={'14px'}>Select elements to generate</Heading5>
+            <FormTitle fontSize={'14px'}>Generate custom elements based on your design:</FormTitle>
             <Form>
                 <CustomCheckbox
                     isFormDisabled={isFormDisabled}
@@ -49,7 +49,12 @@ const MainForm: FunctionComponent<Props> = ({ isFormDisabled, setIsFormValid }) 
 const FormContainer = styled.div<{ color: string }>`
     display: flex;
     flex-direction: column;
+    gap: 30px;
     ${({ color }) => color && `color: ${color}`};
+`
+
+const FormTitle = styled(Heading3)`
+    text-align: center;
 `
 
 const Form = styled.form`
