@@ -6,7 +6,7 @@ const generateColorPaletteFrame = (colors: Set<string>) => {
     if (!colors.size) return
     const colorDisplayFrame = figma.createFrame()
     colorDisplayFrame.name = 'Colors'
-    colorDisplayFrame.resize(150, colors.size * 50)
+    colorDisplayFrame.resize(400, colors.size * 50)
 
     const sortedColors = colorSortingService.sortColorsByHueAndLuminance([...colors])
 
@@ -18,9 +18,10 @@ const generateColorPaletteFrame = (colors: Set<string>) => {
 
         const rectangle = figma.createRectangle()
         rectangle.name = genericsUtils.decimalRgbToHex(r, g, b)
-        rectangle.resize(150, 50)
+        rectangle.resize(240, 32)
+        rectangle.cornerRadius = 4
         rectangle.y = yOffset
-        yOffset += 50
+        yOffset += 40
 
         rectangle.fills = [{ type: 'SOLID', color }]
         colorDisplayFrame.appendChild(rectangle)
