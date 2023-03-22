@@ -1,15 +1,17 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { Dispatch, FunctionComponent, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Colors } from '../../constants'
 import { MsgTypes } from '../../enums/MsgTypes.enum'
 import CustomCheckbox from './Checkbox'
-import { FlexColumn, Heading3 } from './Generics'
+import { FlexColumn, FlexRow, Heading3 } from './Generics'
+import comingSoon from '../../assets/coming-soon.svg'
 
 interface Props {
     isFormDisabled: boolean
+    setIsElementsSelected: Dispatch<any>
 }
 
-const MainForm: FunctionComponent<Props> = ({ isFormDisabled }) => {
+const MainForm: FunctionComponent<Props> = ({ isFormDisabled, setIsElementsSelected }) => {
 
     const [colorsChecked, setColorsChecked] = useState(false)
     const [fontsChecked, setFontsChecked] = useState(false)
@@ -34,15 +36,16 @@ const MainForm: FunctionComponent<Props> = ({ isFormDisabled }) => {
             },
             '*'
         )
+        setIsElementsSelected(null)
     }
 
     return (
         <FormContainer color={isFormDisabled ? Colors.BLACK : Colors.BLACK}>
-            <FormTitle fontSize={'14px'}>Generate custom elements based on your design:</FormTitle>
+            <FormTitle fontSize={'15px'}>Generate custom elements based on your design:</FormTitle>
             <Form>
-                <InputsContainer>
+                <InputsContainer gap={5}>
                     <CustomCheckbox
-                        isFormDisabled={isFormDisabled}
+                        disabled={isFormDisabled}
                         label='Colors'
                         checked={colorsChecked}
                         onChange={(ev) => {
@@ -50,13 +53,35 @@ const MainForm: FunctionComponent<Props> = ({ isFormDisabled }) => {
                         }}
                     />
                     <CustomCheckbox
-                        isFormDisabled={isFormDisabled}
+                        disabled={isFormDisabled}
                         label='Fonts'
                         checked={fontsChecked}
                         onChange={(ev) => {
                             setFontsChecked(ev.target.checked)
                         }}
                     />
+                    <CheckboxContainer>
+                        <CustomCheckbox
+                            disabled={true}
+                            label='Icons'
+                            checked={true}
+                            onChange={() => {
+                                console.log('disabled!')
+                            }}
+                        />
+                        <ComingSoonImg src={comingSoon} />
+                    </CheckboxContainer>
+                    <CheckboxContainer>
+                        <CustomCheckbox
+                            disabled={true}
+                            label='Buttons'
+                            checked={true}
+                            onChange={() => {
+                                console.log('disabled!')
+                            }}
+                        />
+                        <ComingSoonImg src={comingSoon} />
+                    </CheckboxContainer>
                 </InputsContainer>
                 <Button
                     onClick={onCreate}
@@ -80,6 +105,7 @@ const FormContainer = styled.div<{ color: string }>`
 
 const FormTitle = styled(Heading3)`
     text-align: center;
+    line-height: 1.3;
 `
 
 const Form = styled.form`
@@ -90,7 +116,21 @@ const Form = styled.form`
     justify-content: space-between;
 `
 
-const InputsContainer = styled(FlexColumn)``
+const InputsContainer = styled(FlexColumn)`
+    align-self: center;
+    padding-inline-start: 55px;
+    width: 100%;
+`
+
+const CheckboxContainer = styled(FlexRow)`
+    position: relative;
+`
+
+const ComingSoonImg = styled.img`
+    position: absolute;
+    right: 0;
+    top: 1;
+`
 
 const Button = styled.button<{
     backgroundColor: string

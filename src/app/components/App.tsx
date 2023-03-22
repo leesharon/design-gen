@@ -36,7 +36,7 @@ function App() {
                     ? <Loader />
                     : <>
                         {isElementsSelected
-                            ? <MainForm isFormDisabled={!isElementsSelected} />
+                            ? <MainForm isFormDisabled={!isElementsSelected} setIsElementsSelected={setIsElementsSelected} />
                             : <SelectElementsText>Please select some elements to get started.</SelectElementsText>
                         }
                     </>

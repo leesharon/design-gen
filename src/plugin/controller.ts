@@ -13,7 +13,7 @@ setTimeout(() => {
         selection.length ? Strings.ELEMENTS_SELECTED : Strings.NO_ELEMENTS_FOUND,
         !!selection.length
     )
-}, 1000)
+}, 500)
 
 figma.ui.resize(240, 300)
 
@@ -84,18 +84,20 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
 
     iterateThroughAllNodes(selection)
 
-    // Generate the according figma elements and display them
-    withColors && colorsUtils.generateColorPaletteFrame(uniqueColors)
-    withFonts && await fontsUtils.generateFontPaletteFrame(uniqueFonts)
+    setTimeout(async () => {
+        // Generate the according figma elements and display them
+        withColors && colorsUtils.generateColorPaletteFrame(uniqueColors)
+        withFonts && await fontsUtils.generateFontPaletteFrame(uniqueFonts)
 
-    if (uniqueColors.size || uniqueFonts.size) {
-        console.log(Strings.DESIGN_SYSTEM_GENERATED)
-        msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.DESIGN_SYSTEM_GENERATED)
+        if (uniqueColors.size || uniqueFonts.size) {
+            console.log(Strings.DESIGN_SYSTEM_GENERATED)
+            msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.DESIGN_SYSTEM_GENERATED)
 
-        figma.closePlugin()
-    } else {
-        console.log(Strings.NO_ELEMENTS_FOUND)
-        msgsUtils.postMsg(MsgTypes.NO_ELEMENTS_FOUND, Strings.NO_ELEMENTS_FOUND)
-    }
+            figma.closePlugin()
+        } else {
+            console.log(Strings.NO_ELEMENTS_FOUND)
+            msgsUtils.postMsg(MsgTypes.NO_ELEMENTS_FOUND, Strings.NO_ELEMENTS_FOUND)
+        }
+    }, 3000);
 }
 
