@@ -19,7 +19,7 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
     const minFrameWidth = 720
     const lineHeight = rectangleHeight + gap
     const columnWidth = rectangleWidth + gap
-    const frameWidth = Math.max(columnWidth * (colors.size / itemsPerRow) + initialXOffset * 3, minFrameWidth)
+    const frameWidth = Math.max(columnWidth * (colors.size / itemsPerRow) + initialXOffset * 2, minFrameWidth)
     const frameHeight = colors.size * lineHeight
 
     // Create a frame to hold the color palette
@@ -51,12 +51,12 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
 
     const heightOfHeader = yOffset
 
-    let colorIndex = 1
+    let colorIndex = 0
 
     // Create a new rectangle for each color
     for (const colorString of sortedColors) {
         // Add a new row of rectangles if the current row is full
-        if (colorIndex % itemsPerRow === 0) {
+        if (colorIndex % itemsPerRow === 0 && colorIndex !== 0) {
             xOffset += xIncrement
             yOffset = heightOfHeader
         }
