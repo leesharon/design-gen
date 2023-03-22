@@ -1,5 +1,4 @@
 import { colorSortingService } from './color-sorting.service';
-/* eslint-disable indent */
 import { genericsUtils } from './generic.utils'
 
 const generateColorPaletteFrame = (colors: Set<string>): PageNode => {

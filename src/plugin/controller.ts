@@ -52,6 +52,8 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
 
     const uniqueColors = new Set<string>()
     const uniqueFonts = new Set<string>()
+    const fontSizes = new Set<number>()
+    const fontWeights = new Set<number>()
 
     const iterateThroughAllNodes = (nodes: readonly SceneNode[]) => {
         if (!nodes.length) return
@@ -76,10 +78,14 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
             else if (withFonts && type === 'TEXT' && node.fontName) {
                 // If the fontName is not mixed, add it to the array
                 if (node.fontName !== figma.mixed && node.fontSize !== figma.mixed) {
+                    fontSizes.add(node.fontSize);
+                    (typeof node.fontWeight === 'number') && fontWeights.add(node.fontWeight)
+                    const { fontName } = node
+
                     const appTextNode: AppFontNode = {
-                        fontName: node.fontName,
-                        family: node.fontName.family,
-                        style: node.fontName.style,
+                        fontName: fontName,
+                        family: fontName.family,
+                        style: fontName.style,
                         fontSize: node.fontSize,
                     }
                     uniqueFonts.add(JSON.stringify(appTextNode))
@@ -99,7 +105,11 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
 
         // Generate the according figma elements and display them
         withColors && (newCreatedPage = colorsUtils.generateColorPaletteFrame(uniqueColors))
-        withFonts && (newCreatedPage = await fontsUtils.generateFontPaletteFrame(uniqueFonts))
+        withFonts && (newCreatedPage = await fontsUtils.generateFontPaletteFrame(
+            uniqueFonts,
+            [...fontSizes].sort((a, b) => a - b),
+            [...fontWeights].sort((a, b) => a - b))
+        )
 
         if (uniqueColors.size || uniqueFonts.size) {
             console.log(Strings.DESIGN_SYSTEM_GENERATED)
