@@ -42,7 +42,7 @@ const MainForm: FunctionComponent<Props> = ({ isFormDisabled, setIsElementsSelec
     return (
         <FormContainer color={isFormDisabled ? Colors.BLACK : Colors.BLACK}>
             <FormTitle fontSize={'15px'}>Generate custom elements based on your design:</FormTitle>
-            <Form>
+            <Form onSubmit={onCreate}>
                 <InputsContainer gap={5}>
                     <CustomCheckbox
                         disabled={isFormDisabled}
@@ -84,7 +84,6 @@ const MainForm: FunctionComponent<Props> = ({ isFormDisabled, setIsElementsSelec
                     </CheckboxContainer>
                 </InputsContainer>
                 <Button
-                    onClick={onCreate}
                     disabled={!isFormValid}
                     backgroundColor={isFormValid ? Colors.BLUE_PRIMARY : Colors.GRAY_500}
                 >
