@@ -76,7 +76,7 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
 
             else if (withFonts && type === 'TEXT' && node.fontName) {
                 // If the fontName is not mixed, add it to the array
-                if (node.fontName !== figma.mixed && node.fontSize !== figma.mixed) {
+                if (node.fontName !== figma.mixed && node.fontSize !== figma.mixed && node.fontWeight !== figma.mixed) {
                     fontSizes.add(node.fontSize);
                     (typeof node.fontWeight === 'number') && fontWeights.add(node.fontWeight)
                     const { fontName } = node

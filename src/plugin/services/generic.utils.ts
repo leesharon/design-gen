@@ -14,7 +14,6 @@ function hexStringColorToRGB(colorString: string) {
     const colorArray = colorString.split(',').map(parseFloat)
     const [r, g, b] = colorArray
     const rgbColor: RGB = { r, g, b }
-    console.log('rgbColor in function', rgbColor);
 
     return rgbColor
 }
@@ -50,8 +49,8 @@ function isColorOnTheBrightSide(hexColor: string): boolean {
     // Calculate relative luminance using sRGB color space formula
     const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-    // Return 'black' for dark colors, 'white' for light colors
-    return luminance < 128
+    const isBright = luminance > 128
+    return isBright
 }
 
 

@@ -1,12 +1,12 @@
 import { DESCRIPTION_TEXT_GAP, initialXOffset, initialYOffset } from '../../constants/numbers';
-import { APP_PRIMARY_FONT_NAME, APP_REGULAR_FONT_NAME, APP_SECONDARY_FONT_NAME } from '../../constants/strings';
+import { APP_PRIMARY_FONT_NAME, APP_SECONDARY_FONT_NAME } from '../../constants/strings';
 import { colorSortingService } from './color-sorting.service';
 import { genericsUtils } from './generic.utils'
 import { createSeparatorLineNode, createTextNode, setNodeProperties } from './textFunctions';
 
 const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode> => {
     if (!colors.size) return
-    const blackRGB: RGBA = { r: 0, g: 0, b: 0, a: 1 }
+    const blackRGB: RGB = { r: 0, g: 0, b: 0 }
     const whiteRGB = { r: 1, g: 1, b: 1 }
 
     // Set the width and height of a color rectangle
@@ -64,7 +64,7 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
         const color = genericsUtils.hexStringColorToRGB(colorString)
         const colorHexValue = genericsUtils.decimalRgbToHex(color.r, color.g, color.b)
 
-        const hexTextColor = genericsUtils.isColorOnTheBrightSide(colorString) ? blackRGB : whiteRGB
+        const hexTextColor = genericsUtils.isColorOnTheBrightSide(colorHexValue) ? blackRGB : whiteRGB
 
         // Create rectangle node
         const rectangle = figma.createRectangle()
@@ -79,12 +79,10 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
         colorDisplayFrame.appendChild(rectangle)
 
         // Create a text node for the color hex value
-        const colorHexValueTextNode = await createTextNode({ content: colorHexValue, fontSize: 16, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
+        const colorHexValueTextNode = await createTextNode({ content: colorHexValue, fontSize: 18, font: APP_SECONDARY_FONT_NAME, x: xOffset, y: yOffset })
         setNodeProperties(colorHexValueTextNode, rectangleWidth, rectangleHeight, rectangle.x, rectangle.y, 'CENTER')
-        // console.log(hexTextColor);
 
         colorHexValueTextNode.fills = [{ type: 'SOLID', color: hexTextColor }]
-        console.log('WOW');
         colorDisplayFrame.appendChild(colorHexValueTextNode)
 
         colorIndex++
