@@ -1,23 +1,25 @@
-import { APP_PRIMARY_FONT_NAME, APP_REGULAR_FONT_NAME, APP_SECONDARY_FONT_NAME, DESCRIPTION_TEXT_GAP } from '../../constants/strings';
+import { DESCRIPTION_TEXT_GAP, initialXOffset, initialYOffset } from '../../constants/numbers';
+import { APP_PRIMARY_FONT_NAME, APP_REGULAR_FONT_NAME, APP_SECONDARY_FONT_NAME } from '../../constants/strings';
 import { genericsUtils } from './generic.utils'
+import { createSeparatorLineNode, createTextNode, setNodeProperties } from './textFunctions';
 
 const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     if (!fontsStrSet.size) return
     const fontObjectsArraySorted = sortFontsArray(transformFontsStrSetToObjectArray(fontsStrSet))
     // Create a new frame
     const fontDisplayFrame = figma.createFrame()
-    fontDisplayFrame.name = 'Fonts'
+    fontDisplayFrame.name = 'Typography'
     const lineHeight = 100
     const frameWidth = 2000
     const frameHeight = fontsStrSet.size * lineHeight + 400
     // Resize the frame to fit all the text nodes
     fontDisplayFrame.resize(frameWidth, frameHeight)
-    let yOffset = 100
+    let yOffset = initialYOffset
     const yIncrement = fontObjectsArraySorted[0].fontSize + 10
-    const xOffset = 100
+    const xOffset = initialXOffset
 
     // Create a new title text node
-    const pageTitleTextNode = await createTextNode({ content: 'Typography', fontSize: 50, font: APP_PRIMARY_FONT_NAME, x: xOffset, y: yOffset })
+    const pageTitleTextNode = await createTextNode({ content: fontDisplayFrame.name, fontSize: 50, font: APP_PRIMARY_FONT_NAME, x: xOffset, y: yOffset })
     fontDisplayFrame.appendChild(pageTitleTextNode)
     yOffset += pageTitleTextNode.height + 10
 
@@ -27,7 +29,7 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     yOffset += separatorLineNode.height * 2 + DESCRIPTION_TEXT_GAP
 
     // TODO: Insert real weights
-    const pageDescriptionTextNode = await createTextNode({ content: 'Fonts we are using in the system', fontSize: 20, font: APP_SECONDARY_FONT_NAME, x: xOffset, y: yOffset })
+    const pageDescriptionTextNode = await createTextNode({ content: 'This page contains a list of all the fonts used in this design.', fontSize: 20, font: APP_SECONDARY_FONT_NAME, x: xOffset, y: yOffset })
     fontDisplayFrame.appendChild(pageDescriptionTextNode)
     yOffset += pageDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
 
@@ -60,7 +62,7 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
         newTextNode.characters = getAppTextNodeTitle(appTextNode)
 
         // Set the text color and alignment
-        setNodeProperties(newTextNode, frameWidth, lineHeight, yOffset, xOffset)
+        setNodeProperties(newTextNode, frameWidth, lineHeight, xOffset, yOffset, null)
         yOffset += yIncrement
 
         fontDisplayFrame.appendChild(newTextNode)
@@ -68,24 +70,7 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     genericsUtils.createNewPageFromFrame(fontDisplayFrame)
 }
 
-function createSeparatorLineNode(frameWidth: number, xOffset: number, yOffset: number) {
-    const separatorLineNode = figma.createLine();
-    separatorLineNode.resize(frameWidth - (xOffset * 2), 0);
-    separatorLineNode.x = xOffset;
-    separatorLineNode.y = yOffset + 10;
-    separatorLineNode.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }];
-    separatorLineNode.strokeWeight = 5;
-    return separatorLineNode;
-}
 
-function setNodeProperties(newTextNode: TextNode, frameWidth: number, lineHeight: number, y: number, x: number): void {
-    newTextNode.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }]
-    newTextNode.textAlignHorizontal = 'LEFT'
-    newTextNode.textAlignVertical = 'CENTER'
-    newTextNode.resize(frameWidth, lineHeight)
-    newTextNode.y = y
-    newTextNode.x = x
-}
 
 async function doesFontExist(fontNameObj: FontName): Promise<boolean> {
     let doesFontExist = false
@@ -124,17 +109,5 @@ function transformFontsStrSetToObjectArray(fontsStrArr: Set<string>) {
 
 export const fontsUtils = {
     generateFontPaletteFrame,
-}
-async function createTextNode(params: { content: string, font: FontName, fontSize: number, x: number, y: number }): Promise<TextNode> {
-    // Create a new text node
-    const newTextNode = figma.createText()
-    await figma.loadFontAsync(params.font)
-    newTextNode.fontName = params.font
-    newTextNode.fontSize = params.fontSize
-    newTextNode.characters = params.content
-    newTextNode.x = params.x
-    newTextNode.y = params.y
-
-    return newTextNode
 }
 

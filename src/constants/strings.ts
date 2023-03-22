@@ -14,7 +14,6 @@ const APP_REGULAR_FONT_NAME: FontName = {
     family: 'Roboto',
     style: 'Regular',
 }
-const DESCRIPTION_TEXT_GAP = 24
 
 export {
     DESIGN_SYSTEM_GENERATED,
@@ -24,5 +23,4 @@ export {
     APP_PRIMARY_FONT_NAME,
     APP_SECONDARY_FONT_NAME,
     APP_REGULAR_FONT_NAME,
-    DESCRIPTION_TEXT_GAP,
 }
