@@ -3,6 +3,7 @@ import { MsgTypes } from '../enums/MsgTypes.enum'
 import { colorsUtils } from './services/colors.service'
 import { msgsUtils } from './services/msgs.utils'
 import { fontsUtils } from './services/fonts.service'
+import { APP_PRIMARY_FONT_NAME } from '../constants/strings'
 
 figma.showUI(__html__)
 
@@ -75,10 +76,10 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
             else if (withFonts && type === 'TEXT' && node.fontName) {
                 // If the fontName is not mixed, add it to the array
                 if (node.fontName !== figma.mixed && node.fontSize !== figma.mixed) {
-                    const appTextNode: AppTextNode = {
+                    const appTextNode: AppFontNode = {
                         fontName: node.fontName,
-                        fontFamily: node.fontName.family,
-                        fontStyle: node.fontName.style,
+                        family: node.fontName.family,
+                        style: node.fontName.style,
                         fontSize: node.fontSize,
                     }
                     uniqueFonts.add(JSON.stringify(appTextNode))

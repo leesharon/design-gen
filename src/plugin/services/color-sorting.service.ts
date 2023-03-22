@@ -33,8 +33,8 @@ function rgbToHsv(color: Color): [number, number, number] {
 
 function sortColorsByHueAndLuminance(colors: ColorString[]): ColorString[] {
     return colors.sort((colorA, colorB) => {
-        const [h1, s1, v1] = rgbToHsv(parseColorString(colorA))
-        const [h2, s2, v2] = rgbToHsv(parseColorString(colorB))
+        const [h1, , v1] = rgbToHsv(parseColorString(colorA))
+        const [h2, , v2] = rgbToHsv(parseColorString(colorB))
 
         if (h1 < h2) {
             return -1

@@ -1,7 +1,7 @@
 
-type AppTextNode = {
+type AppFontNode = {
   fontName: FontName
-  fontFamily: string
-  fontStyle: string
+  family: string
+  style: string
   fontSize: number
 }
