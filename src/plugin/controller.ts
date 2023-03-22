@@ -15,6 +15,15 @@ setTimeout(() => {
     )
 }, 500)
 
+figma.on('selectionchange', () => {
+    const { selection } = figma.currentPage
+    msgsUtils.postMsg(
+        MsgTypes.IS_ELEMENTS_SELECTED,
+        selection.length ? Strings.ELEMENTS_SELECTED : Strings.NO_ELEMENTS_FOUND,
+        !!selection.length
+    )
+})
+
 figma.ui.resize(240, 300)
 
 figma.skipInvisibleInstanceChildren = true

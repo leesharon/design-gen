@@ -37,7 +37,7 @@ function App() {
                     : <>
                         {isElementsSelected
                             ? <MainForm isFormDisabled={!isElementsSelected} setIsElementsSelected={setIsElementsSelected} />
-                            : <SelectElementsText>Please select some elements to get started.</SelectElementsText>
+                            : <SelectElementsText>Please select some elements.</SelectElementsText>
                         }
                     </>
             }
