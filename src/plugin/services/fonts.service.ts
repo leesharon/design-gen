@@ -26,6 +26,7 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     fontDisplayFrame.appendChild(separatorLineNode)
     yOffset += separatorLineNode.height * 2 + DESCRIPTION_TEXT_GAP
 
+    // TODO: Insert real weights
     const pageDescriptionTextNode = await createTextNode({ content: 'Fonts we are using in the system', fontSize: 20, font: APP_SECONDARY_FONT_NAME, x: xOffset, y: yOffset })
     fontDisplayFrame.appendChild(pageDescriptionTextNode)
     yOffset += pageDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
@@ -34,6 +35,7 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     fontDisplayFrame.appendChild(pageFontWeightDescriptionTextNode)
     yOffset += pageFontWeightDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
 
+    // TODO: Insert real font sizes
     const pageFontSizesDescriptionTextNode = await createTextNode({ content: 'Font sizes used : 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96', fontSize: 20, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
     fontDisplayFrame.appendChild(pageFontSizesDescriptionTextNode)
     yOffset += pageFontSizesDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
