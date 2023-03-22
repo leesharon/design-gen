@@ -4,7 +4,7 @@ import { colorSortingService } from './color-sorting.service';
 import { genericsUtils } from './generic.utils'
 import { createSeparatorLineNode, createTextNode, setNodeProperties } from './textFunctions';
 
-const generateColorPaletteFrame = async (colors: Set<string>) => {
+const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode> => {
     if (!colors.size) return
     const blackRGB: RGBA = { r: 0, g: 0, b: 0, a: 1 }
     const whiteRGB = { r: 1, g: 1, b: 1 }
@@ -90,7 +90,7 @@ const generateColorPaletteFrame = async (colors: Set<string>) => {
         colorIndex++
         yOffset += yIncrement
     }
-    genericsUtils.createNewPageFromFrame(colorDisplayFrame)
+    return genericsUtils.createNewPageFromFrame(colorDisplayFrame)
 }
 
 const getAllUniqueColors = (node: SceneNode, uniqueColors: Set<string>) => {
