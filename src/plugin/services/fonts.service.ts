@@ -9,7 +9,7 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     fontDisplayFrame.name = 'Fonts'
     const lineHeight = 100
     const frameWidth = 2000
-    const frameHeight = fontsStrSet.size * lineHeight
+    const frameHeight = fontsStrSet.size * lineHeight + 400
     // Resize the frame to fit all the text nodes
     fontDisplayFrame.resize(frameWidth, frameHeight)
     let yOffset = 100
@@ -83,8 +83,6 @@ function setNodeProperties(newTextNode: TextNode, frameWidth: number, lineHeight
     newTextNode.textAlignHorizontal = 'LEFT'
     newTextNode.textAlignVertical = 'CENTER'
     newTextNode.resize(frameWidth, lineHeight)
-    newTextNode.y = y
-    newTextNode.x = x
 }
 
 async function doesFontExist(fontNameObj: FontName): Promise<boolean> {
