@@ -1,12 +1,12 @@
 import { DESCRIPTION_TEXT_GAP, initialXOffset, initialYOffset } from '../../constants/numbers';
-import { APP_PRIMARY_FONT_NAME, APP_REGULAR_FONT_NAME, APP_SECONDARY_FONT_NAME } from '../../constants/strings';
+import { APP_PRIMARY_FONT_NAME, APP_SECONDARY_FONT_NAME } from '../../constants/strings';
 import { colorSortingService } from './color-sorting.service';
 import { genericsUtils } from './generic.utils'
 import { createSeparatorLineNode, createTextNode, setNodeProperties } from './textFunctions';
 
 const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode> => {
     if (!colors.size) return
-    const blackRGB: RGBA = { r: 0, g: 0, b: 0, a: 1 }
+    const blackRGB: RGB = { r: 0, g: 0, b: 0 }
     const whiteRGB = { r: 1, g: 1, b: 1 }
 
     // Set the width and height of a color rectangle
@@ -16,9 +16,10 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
     const itemsPerRow = 10
     const gap = 20
     // Set the frame size
+    const minFrameWidth = 720
     const lineHeight = rectangleHeight + gap
     const columnWidth = rectangleWidth + gap
-    const frameWidth = (colors.size % itemsPerRow) * columnWidth
+    const frameWidth = Math.max(columnWidth * (colors.size / itemsPerRow) + initialXOffset * 2, minFrameWidth)
     const frameHeight = colors.size * lineHeight
 
     // Create a frame to hold the color palette
@@ -50,12 +51,12 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
 
     const heightOfHeader = yOffset
 
-    let colorIndex = 1
+    let colorIndex = 0
 
     // Create a new rectangle for each color
     for (const colorString of sortedColors) {
         // Add a new row of rectangles if the current row is full
-        if (colorIndex % itemsPerRow === 0) {
+        if (colorIndex % itemsPerRow === 0 && colorIndex !== 0) {
             xOffset += xIncrement
             yOffset = heightOfHeader
         }
@@ -64,13 +65,13 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
         const color = genericsUtils.hexStringColorToRGB(colorString)
         const colorHexValue = genericsUtils.decimalRgbToHex(color.r, color.g, color.b)
 
-        const hexTextColor = genericsUtils.isColorOnTheBrightSide(colorString) ? blackRGB : whiteRGB
+        const hexTextColor = genericsUtils.isColorOnTheBrightSide(colorHexValue) ? blackRGB : whiteRGB
 
         // Create rectangle node
         const rectangle = figma.createRectangle()
         rectangle.name = colorHexValue
         rectangle.resize(rectangleWidth, rectangleHeight)
-        rectangle.cornerRadius = 4
+        rectangle.cornerRadius = 8
         rectangle.y = yOffset
         rectangle.x = xOffset
 
@@ -79,14 +80,14 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
         colorDisplayFrame.appendChild(rectangle)
 
         // Create a text node for the color hex value
-        const colorHexValueTextNode = await createTextNode({ content: colorHexValue, fontSize: 16, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
-        setNodeProperties(colorHexValueTextNode, rectangleWidth, rectangleHeight, rectangle.x, rectangle.y, 'CENTER')
-        // console.log(hexTextColor);
+        const colorHexValueTextNode = await createTextNode({ content: colorHexValue, fontSize: 22, font: APP_SECONDARY_FONT_NAME, x: xOffset, y: yOffset })
+        setNodeProperties(colorHexValueTextNode, rectangleWidth - gap, rectangleHeight, rectangle.x, rectangle.y, 'RIGHT')
 
+        // Add the color to the text node
         colorHexValueTextNode.fills = [{ type: 'SOLID', color: hexTextColor }]
-        console.log('WOW');
         colorDisplayFrame.appendChild(colorHexValueTextNode)
 
+        // Increment iteration variables
         colorIndex++
         yOffset += yIncrement
     }
