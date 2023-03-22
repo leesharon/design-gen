@@ -1,3 +1,4 @@
+import { genericsUtils } from './generic.utils'
 
 type ColorString = string
 type Color = [number, number, number]
@@ -47,6 +48,20 @@ function sortColorsByHueAndLuminance(colors: ColorString[]): ColorString[] {
     })
 }
 
+function filterDuplicateColors(colors: ColorString[]): ColorString[] {
+    const colorMap = {}
+
+    return colors.filter(color => {
+        const colorArray = color.split(',').map(parseFloat)
+        const [r, g, b] = colorArray
+        const colorString = genericsUtils.decimalRgbToHex(r, g, b)
+        if (colorMap[colorString]) return false
+        colorMap[colorString] = true
+        return true
+    })
+}
+
 export const colorSortingService = {
     sortColorsByHueAndLuminance,
+    filterDuplicateColors
 }

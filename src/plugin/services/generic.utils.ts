@@ -26,12 +26,12 @@ function decimalRgbToHex(r: number, g: number, b: number): string {
     return rgbToHex(rInt, gInt, bInt)
 }
 
-function createNewPageFromFrame(frame: FrameNode): void {
+function createNewPageFromFrame(frame: FrameNode): PageNode {
     const newPage = figma.createPage()
     newPage.name = frame.name
     newPage.appendChild(frame)
-    figma.currentPage = newPage
     figma.root.appendChild(newPage)
+    return newPage
 }
 
 function compare2ofType<T>(a: T, b: T, isReverse = false): number {

@@ -3,7 +3,12 @@ import { APP_PRIMARY_FONT_NAME, APP_REGULAR_FONT_NAME, APP_SECONDARY_FONT_NAME }
 import { genericsUtils } from './generic.utils'
 import { createSeparatorLineNode, createTextNode, setNodeProperties } from './textFunctions';
 
-const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
+const generateFontPaletteFrame = async (
+    fontsStrSet: Set<string>,
+    fontSizes: number[],
+    fontWeights: number[]
+): Promise<PageNode> => {
+
     if (!fontsStrSet.size) return
     const fontObjectsArraySorted = sortFontsArray(transformFontsStrSetToObjectArray(fontsStrSet))
     // Create a new frame
@@ -33,12 +38,12 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
     fontDisplayFrame.appendChild(pageDescriptionTextNode)
     yOffset += pageDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
 
-    const pageFontWeightDescriptionTextNode = await createTextNode({ content: 'Weights used : Light, Regular, Medium, Bold', fontSize: 20, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
+    const pageFontWeightDescriptionTextNode = await createTextNode({ content: `Weights used : ${fontWeights.join(', ')}`, fontSize: 20, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
     fontDisplayFrame.appendChild(pageFontWeightDescriptionTextNode)
     yOffset += pageFontWeightDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
 
     // TODO: Insert real font sizes
-    const pageFontSizesDescriptionTextNode = await createTextNode({ content: 'Font sizes used : 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96', fontSize: 20, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
+    const pageFontSizesDescriptionTextNode = await createTextNode({ content: `Font sizes used : ${fontSizes.join(', ')}`, fontSize: 20, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
     fontDisplayFrame.appendChild(pageFontSizesDescriptionTextNode)
     yOffset += pageFontSizesDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
 
@@ -67,7 +72,7 @@ const generateFontPaletteFrame = async (fontsStrSet: Set<string>) => {
 
         fontDisplayFrame.appendChild(newTextNode)
     }
-    genericsUtils.createNewPageFromFrame(fontDisplayFrame)
+    return genericsUtils.createNewPageFromFrame(fontDisplayFrame)
 }
 
 

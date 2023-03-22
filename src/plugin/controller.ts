@@ -51,6 +51,8 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
 
     const uniqueColors = new Set<string>()
     const uniqueFonts = new Set<string>()
+    const fontSizes = new Set<number>()
+    const fontWeights = new Set<number>()
 
     const iterateThroughAllNodes = (nodes: readonly SceneNode[]) => {
         if (!nodes.length) return
@@ -75,10 +77,14 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
             else if (withFonts && type === 'TEXT' && node.fontName) {
                 // If the fontName is not mixed, add it to the array
                 if (node.fontName !== figma.mixed && node.fontSize !== figma.mixed) {
+                    fontSizes.add(node.fontSize);
+                    (typeof node.fontWeight === 'number') && fontWeights.add(node.fontWeight)
+                    const { fontName } = node
+
                     const appTextNode: AppFontNode = {
-                        fontName: node.fontName,
-                        family: node.fontName.family,
-                        style: node.fontName.style,
+                        fontName: fontName,
+                        family: fontName.family,
+                        style: fontName.style,
                         fontSize: node.fontSize,
                     }
                     uniqueFonts.add(JSON.stringify(appTextNode))
@@ -94,19 +100,26 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
     iterateThroughAllNodes(selection)
 
     setTimeout(async () => {
+        let newCreatedPage: PageNode
+
         // Generate the according figma elements and display them
-        withColors && await colorsUtils.generateColorPaletteFrame(uniqueColors)
-        withFonts && await fontsUtils.generateFontPaletteFrame(uniqueFonts)
+        withColors && (newCreatedPage = await colorsUtils.generateColorPaletteFrame(uniqueColors))
+        withFonts && (newCreatedPage = await fontsUtils.generateFontPaletteFrame(
+            uniqueFonts,
+            [...fontSizes].sort((a, b) => a - b),
+            [...fontWeights].sort((a, b) => a - b))
+        )
 
         if (uniqueColors.size || uniqueFonts.size) {
             console.log(Strings.DESIGN_SYSTEM_GENERATED)
             msgsUtils.postMsg(MsgTypes.GENERATE_DESIGN_SYSTEM, Strings.DESIGN_SYSTEM_GENERATED)
 
+            figma.currentPage = newCreatedPage
             figma.closePlugin()
         } else {
             console.log(Strings.NO_ELEMENTS_FOUND)
             msgsUtils.postMsg(MsgTypes.NO_ELEMENTS_FOUND, Strings.NO_ELEMENTS_FOUND)
         }
-    }, 3000);
+    }, 1000);
 }
 

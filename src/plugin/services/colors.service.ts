@@ -26,8 +26,8 @@ const generateColorPaletteFrame = async (colors: Set<string>) => {
     colorDisplayFrame.name = 'Color Palette'
     colorDisplayFrame.resize(frameWidth, frameHeight)
 
-    // Sort the colors by hue and luminance
-    const sortedColors = colorSortingService.sortColorsByHueAndLuminance([...colors])
+    let sortedColors = colorSortingService.sortColorsByHueAndLuminance([...colors])
+    sortedColors = colorSortingService.filterDuplicateColors(sortedColors)
 
     let yOffset = initialYOffset
     let xOffset = initialXOffset
