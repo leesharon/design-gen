@@ -13,9 +13,9 @@ interface Props {
 
 const MainForm: FunctionComponent<Props> = ({ isFormDisabled, setIsElementsSelected }) => {
 
-    const [colorsChecked, setColorsChecked] = useState(false)
-    const [fontsChecked, setFontsChecked] = useState(false)
-    const [isFormValid, setIsFormValid] = useState(false)
+    const [colorsChecked, setColorsChecked] = useState(true)
+    const [fontsChecked, setFontsChecked] = useState(true)
+    const [isFormValid, setIsFormValid] = useState(true)
 
     useEffect(() => {
         if (colorsChecked || fontsChecked)
