@@ -8,20 +8,18 @@ const generateFontPaletteFrame = async (
     fontSizes: number[],
     fontWeights: number[]
 ): Promise<PageNode> => {
-
     if (!fontsStrSet.size) return
+
     const fontObjectsArraySorted = sortFontsArray(transformFontsStrSetToObjectArray(fontsStrSet))
     // Create a new frame
     const fontDisplayFrame = figma.createFrame()
     fontDisplayFrame.name = 'Typography'
     const lineHeight = 100
-    const frameWidth = 2000
-    const frameHeight = fontsStrSet.size * lineHeight + 400
-    // Resize the frame to fit all the text nodes
-    fontDisplayFrame.resize(frameWidth, frameHeight)
     let yOffset = initialYOffset
     const yIncrement = fontObjectsArraySorted[0].fontSize + 10
     const xOffset = initialXOffset
+    const frameWidth = fontObjectsArraySorted[0].fontSize * getAppTextNodeTitle(fontObjectsArraySorted[0]).length + xOffset * 2
+    const frameHeight = fontsStrSet.size * lineHeight + 400
 
     // Create a new title text node
     const pageTitleTextNode = await createTextNode({ content: fontDisplayFrame.name, fontSize: 50, font: APP_PRIMARY_FONT_NAME, x: xOffset, y: yOffset })
@@ -33,7 +31,6 @@ const generateFontPaletteFrame = async (
     fontDisplayFrame.appendChild(separatorLineNode)
     yOffset += separatorLineNode.height * 2 + DESCRIPTION_TEXT_GAP
 
-    // TODO: Insert real weights
     const pageDescriptionTextNode = await createTextNode({ content: 'This page contains a list of all the fonts used in this design.', fontSize: 20, font: APP_SECONDARY_FONT_NAME, x: xOffset, y: yOffset })
     fontDisplayFrame.appendChild(pageDescriptionTextNode)
     yOffset += pageDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
@@ -42,7 +39,6 @@ const generateFontPaletteFrame = async (
     fontDisplayFrame.appendChild(pageFontWeightDescriptionTextNode)
     yOffset += pageFontWeightDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
 
-    // TODO: Insert real font sizes
     const pageFontSizesDescriptionTextNode = await createTextNode({ content: `Font sizes used : ${fontSizes.join(', ')}`, fontSize: 20, font: APP_REGULAR_FONT_NAME, x: xOffset, y: yOffset })
     fontDisplayFrame.appendChild(pageFontSizesDescriptionTextNode)
     yOffset += pageFontSizesDescriptionTextNode.height + DESCRIPTION_TEXT_GAP
@@ -50,6 +46,9 @@ const generateFontPaletteFrame = async (
     const separatorLineNode2 = createSeparatorLineNode(frameWidth, xOffset, yOffset);
     fontDisplayFrame.appendChild(separatorLineNode2)
     yOffset += separatorLineNode2.height * 2 + DESCRIPTION_TEXT_GAP
+
+    // Resize the frame to fit all the text nodes
+    fontDisplayFrame.resize(frameWidth, frameHeight)
 
     // Create a new text node for each font
     for (const appTextNode of fontObjectsArraySorted) {
