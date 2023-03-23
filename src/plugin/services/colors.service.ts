@@ -6,13 +6,28 @@ import { createSeparatorLineNode, createTextNode, setNodeProperties } from './te
 
 const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode> => {
     if (!colors.size) return
+
+    // Create rgb color objects for black and white
     const blackRGB: RGB = { r: 0, g: 0, b: 0 }
     const whiteRGB: RGB = { r: 1, g: 1, b: 1 }
+
+    // Create a drop shadow effect style
+    const effectStyle = figma.createEffectStyle();
+    effectStyle.effects = [
+        {
+            type: 'DROP_SHADOW',
+            color: { r: 0, g: 0, b: 0, a: 0.25 },
+            offset: { x: 0, y: 4 },
+            radius: 4,
+            blendMode: 'NORMAL',
+            visible: true,
+        } as DropShadowEffect
+    ]
 
     // Set the width and height of a color rectangle
     const rectangleWidth = 400;
     const rectangleHeight = 64;
-
+    
     const itemsPerRow = 10
     const gap = 20
     const minFrameWidth = 720
@@ -92,6 +107,8 @@ const generateColorPaletteFrame = async (colors: Set<string>): Promise<PageNode>
         // Create a text node for the color hex value
         const colorHexValueTextNode = await createTextNode({ content: colorHexValue, fontSize: 22, font: APP_SECONDARY_FONT_NAME, x: xOffset, y: yOffset })
         setNodeProperties(colorHexValueTextNode, rectangleWidth - gap, rectangleHeight, rectangle.x, rectangle.y, 'RIGHT')
+
+        rectangle.effects = effectStyle.effects
 
         // Add the color to the text node
         colorHexValueTextNode.fills = [{ type: 'SOLID', color: hexTextColor }]
