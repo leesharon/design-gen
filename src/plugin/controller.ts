@@ -77,7 +77,7 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
             else if (withFonts && type === 'TEXT' && node.fontName) {
                 // If the fontName is not mixed, add it to the array
                 if (node.fontName !== figma.mixed && node.fontSize !== figma.mixed && node.fontWeight !== figma.mixed) {
-                    fontSizes.add(node.fontSize);
+                    fontSizes.add(+node.fontSize.toFixed(1));
                     (typeof node.fontWeight === 'number') && fontWeights.add(node.fontWeight)
                     const { fontName } = node
 
@@ -120,6 +120,6 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
             console.log(Strings.NO_ELEMENTS_FOUND)
             msgsUtils.postMsg(MsgTypes.NO_ELEMENTS_FOUND, Strings.NO_ELEMENTS_FOUND)
         }
-    }, 1000);
+    }, 0);
 }
 
