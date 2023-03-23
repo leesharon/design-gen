@@ -86,7 +86,7 @@ async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
                         fontName: fontName,
                         family: fontName.family,
                         style: fontName.style,
-                        fontSize: node.fontSize,
+                        fontSize: +node.fontSize.toFixed(1),
                     }
                     uniqueFonts.add(JSON.stringify(appTextNode))
                     // If the fontName is mixed, log it to the console
