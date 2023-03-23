@@ -45,6 +45,7 @@ figma.ui.onmessage = (msg) => {
 
 async function generateDesignSystem(withColors: boolean, withFonts: boolean) {
     console.log('Generating Design System...')
+    const { selection } = figma.currentPage
 
     if (!selection.length)
         return msgsUtils.postMsg(MsgTypes.NO_SELECTION, Strings.NO_SELECTION)
